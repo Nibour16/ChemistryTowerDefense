@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(TowerStat))]
-public class BaseTower : MonoBehaviour
+public abstract class BaseTower : MonoBehaviour
 {
     protected TowerStat stat;
 

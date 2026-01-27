@@ -4,7 +4,7 @@ public class TowerStat : MonoBehaviour
 {
     public float price = 50f;
     public float attackDelay = 2f;
-    public float attackRange = 5f;
+    public float attackRange = 15f;
 
     public float Price => price;
     public float AttackDelay => attackDelay;
