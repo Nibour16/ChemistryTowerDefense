@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.UI.Image;
 
 public class StandardShootingTower : BaseTower
 {
@@ -27,7 +25,7 @@ public class StandardShootingTower : BaseTower
             if (_coolingTimer <= 0f)
             {
                 Shoot();
-                _coolingTimer = stat.attackDelay;
+                _coolingTimer = stat.AttackDelay;
             }
 
             _coolingTimer -= Time.deltaTime;
@@ -39,7 +37,7 @@ public class StandardShootingTower : BaseTower
         RaycastHit[] hits = Physics.BoxCastAll(
             shootingSource.position, boxHalfExtents,
             transform.forward, transform.rotation,
-            stat.attackRange, 1
+            stat.AttackRange, 1
         );
 
         foreach (var hit in hits)

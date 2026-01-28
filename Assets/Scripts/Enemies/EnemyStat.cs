@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EnemyStat : MonoBehaviour
 {
-    public float health = 100f;
-    public float moveSpeed = 1f;
+    [SerializeField] private float health = 100f;
+    [SerializeField] private float moveSpeed = 1f;
 
     public float Health => health;
     public float MoveSpeed => moveSpeed;
