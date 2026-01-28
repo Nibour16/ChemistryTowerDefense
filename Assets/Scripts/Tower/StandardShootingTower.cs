@@ -37,7 +37,7 @@ public class StandardShootingTower : BaseTower
         RaycastHit[] hits = Physics.BoxCastAll(
             shootingSource.position, boxHalfExtents,
             transform.forward, transform.rotation,
-            stat.AttackRange, 1
+            stat.AttackRange, LayerMask.GetMask("Character")
         );
 
         foreach (var hit in hits)
@@ -46,7 +46,6 @@ public class StandardShootingTower : BaseTower
                 continue;
 
             targetEnemy = hit.collider.GetComponent<EnemyCharacter>();
-
             return (targetEnemy != null);
         }
 
