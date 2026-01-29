@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
 {
+    // Leave a tiny space as when telling enemy reach a point
     [SerializeField] private float reachDistance = 0.05f;
+
+    // Cached Call Game Over If Reach End private boolean
     private bool _callGameOverIfReachEnd = true;
 
-    private LineRenderer _enemyPath; //Enemy path reference that enemy can use to follow
-    private EnemyPath _enemyPathClass;   //Enemy path class reference (from _enemyPath)
-    private EnemyCharacter _enemy;  //Enemy character reference
+    private EnemyPath _enemyPath; //Enemy path reference that enemy can use to follow
+    private EnemyCharacter _enemy;  //Enemy character reference that can share the stats
 
     private Vector3[] _pathPoints;  //Path points data that gets from the enemy path
     private int _currentPathPointIndex = 0; //Enemy's current path point arrived
@@ -15,13 +17,13 @@ public class EnemyMove : MonoBehaviour
     private void Awake()
     {
         _enemy = GetComponent<EnemyCharacter>();
-        enabled = false; // Close by default
+        enabled = false; //Close by default
     }
 
     #region Path Binding & Data Initialization
-    public void BindEnemyPath(LineRenderer enemyPath, bool resetPathPointIndex)
+    public void BindEnemyPath(EnemyPath enemyPath, bool resetPathPointIndex)
     {
-        if (_enemyPath == null)
+        if (enemyPath == null)
         {
             Debug.LogError("Enemy path is null");
             return;
@@ -29,37 +31,14 @@ public class EnemyMove : MonoBehaviour
 
         _enemyPath = enemyPath; //Bind enemy path from input path (line renderer)
 
-        HandleCallGameOverIfReachEnd();
-        CachePathPoints();  //Set end of path behaviour
+        // Cache path points data
+        _pathPoints = _enemyPath.PathPoints;
+
+        // Cache Call Game Over If Reach End boolean
+        _callGameOverIfReachEnd = _enemyPath.callGameOverIfReachEnd;
 
         // If reset bool is true then we reset the current path point back to the start (i.e. 0)
         if (resetPathPointIndex) _currentPathPointIndex = 0;
-    }
-
-    private void HandleCallGameOverIfReachEnd()
-    {
-        // Initialize enemy path class
-        _enemyPathClass = _enemyPath.GetComponent<EnemyPath>();
-
-        // If enemy path script component is exist
-        if (_enemyPathClass != null)
-        {
-            // Then this script component will tell if the enemy can "kill" the player
-            _callGameOverIfReachEnd = _enemyPathClass.callGameOverIfReachEnd;
-        }
-        else
-        {
-            // Otherwise by default the end of the path is the enemy's final goal
-            _callGameOverIfReachEnd = true;
-        }
-    }
-
-    private void CachePathPoints()
-    {
-        // Cache all path points so movement logic can directly access
-        // any waypoint by index (e.g. _pathPoints[i])
-        _pathPoints = new Vector3[_enemyPath.positionCount];
-        _enemyPath.GetPositions(_pathPoints);
     }
     #endregion
 
@@ -68,7 +47,10 @@ public class EnemyMove : MonoBehaviour
     {
         // If path point data is empty enemy will stop moving immediately
         if (_pathPoints == null || _currentPathPointIndex >= _pathPoints.Length)
+        {
             enabled = false;
+            return;
+        }
 
         // Otherwise move to the next point
         MoveToNextPoint();

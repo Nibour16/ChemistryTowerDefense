@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyStat))]
 public class EnemyCharacter : MonoBehaviour, IDamageable
 {
-    public LineRenderer defaultPath;
+    public EnemyPath defaultPath;
     
     protected EnemyStat stat;
     protected EnemyMove enemyMove;

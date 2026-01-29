@@ -83,7 +83,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 2, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.1
@@ -156,3 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPath
   callGameOverIfReachEnd: 1
+  showPathInGame: 1
+  pathPoints:
+  - {x: 0, y: 0, z: 0}
+  - {x: 2, y: 0, z: 0}
