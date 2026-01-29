@@ -567,7 +567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1210091707495614418, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: pathPoints.Array.data[3].x
-      value: 8
+      value: 6.3767138
       objectReference: {fileID: 0}
     - target: {fileID: 1210091707495614418, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: pathPoints.Array.data[3].y
@@ -575,7 +575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1210091707495614418, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: pathPoints.Array.data[3].z
-      value: 2
+      value: -3.7874331
       objectReference: {fileID: 0}
     - target: {fileID: 3333550047997072297, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -683,7 +683,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7083565121077219448, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: m_Positions.Array.data[3].x
-      value: 8
+      value: 6.3767138
       objectReference: {fileID: 0}
     - target: {fileID: 7083565121077219448, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: m_Positions.Array.data[3].y
@@ -691,7 +691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7083565121077219448, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: m_Positions.Array.data[3].z
-      value: 2
+      value: -3.7874331
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

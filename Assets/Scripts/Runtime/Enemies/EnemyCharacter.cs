@@ -4,12 +4,17 @@ using UnityEngine;
 public class EnemyCharacter : MonoBehaviour, IDamageable
 {
     public EnemyPath defaultPath;
-    
+
+    [Header("Ground Enemy Settings")]
+    [SerializeField] private bool isGroundEnemy = true;
+    public bool IsGroundEnemy => isGroundEnemy;
+
     protected EnemyStat stat;
     protected EnemyMove enemyMove;
 
     protected float currentHealth;
     protected float currentMoveSpeed;
+    protected float currentRotatingSpeed;
 
     protected virtual void Awake()
     {
@@ -18,6 +23,7 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
 
         currentHealth = stat.Health;
         currentMoveSpeed = stat.MoveSpeed;
+        currentRotatingSpeed = stat.RotatingSpeed;
     }
 
     protected virtual void Start()
@@ -41,6 +47,7 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     }
 
     public float GetCurrentMoveSpeed() => currentMoveSpeed;
+    public float GetCurrentRotateSpeed() => currentRotatingSpeed;
 
     public virtual void OnTakenDamage(float basedamage)
     {

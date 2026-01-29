@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStat
   health: 100
   moveSpeed: 1
+  rotatingSpeed: 5
 --- !u!114 &8528215496870704631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCharacter
   defaultPath: {fileID: 0}
+  isGroundEnemy: 1
 --- !u!114 &520757188673186611
 MonoBehaviour:
   m_ObjectHideFlags: 0

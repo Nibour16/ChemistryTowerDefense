@@ -5,8 +5,9 @@ public class EnemyMove : MonoBehaviour
     // Leave a tiny space as when telling enemy reach a point
     [SerializeField] private float reachDistance = 0.05f;
 
-    // Cached Call Game Over If Reach End private boolean
+    // Variables that are ready to cache
     private bool _callGameOverIfReachEnd = true;
+    private bool _isGroundEnemy = true;
 
     private EnemyPath _enemyPath; //Enemy path reference that enemy can use to follow
     private EnemyCharacter _enemy;  //Enemy character reference that can share the stats
@@ -16,7 +17,11 @@ public class EnemyMove : MonoBehaviour
 
     private void Awake()
     {
-        _enemy = GetComponent<EnemyCharacter>();
+        _enemy = GetComponent<EnemyCharacter>(); //Assign enemy character class reference
+
+        // Cache variables during awake
+        _isGroundEnemy = _enemy.IsGroundEnemy;
+
         enabled = false; //Close by default
     }
 
@@ -60,6 +65,7 @@ public class EnemyMove : MonoBehaviour
     {
         Vector3 target = _pathPoints[_currentPathPointIndex];   //Get target position 
         Vector3 dir = target - transform.position;  //Get target direction
+        if (_isGroundEnemy) dir.y = 0f; //Lock y direction to 0 for 3d ground tower defense
 
         // Calculate the size of the moving step
         float step = _enemy.GetCurrentMoveSpeed() * Time.deltaTime; 
@@ -75,7 +81,22 @@ public class EnemyMove : MonoBehaviour
         }
         else
         {
-            transform.position += dir.normalized * step;    //Moving logic
+            HandleRotation(dir);
+            transform.position += transform.forward * step;    //Moving logic
+        }
+    }
+
+    private void HandleRotation(Vector3 dir)
+    {
+        //Rotate to look at the target point
+        if (dir != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                _enemy.GetCurrentRotateSpeed() * Time.deltaTime
+            );
         }
     }
 
