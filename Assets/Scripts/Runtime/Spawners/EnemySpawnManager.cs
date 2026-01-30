@@ -42,6 +42,22 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
     public int CurrentRound => _currentRound;
     public bool IsFinalRound => _isFianlRound;
 
+    #region Initialization
+    private void OnEnable()
+    {
+        foreach (var enemySpawner in _enemySpawners)
+            enemySpawner.enabled = true;
+
+        foreach (var round in Rounds)
+            round.EnsureEnemySpawners(_enemySpawners);
+    }
+
+    private void OnDisable()
+    {
+        foreach (var enemySpawner in _enemySpawners)
+            enemySpawner.enabled = false;
+    }
+
     public void AddEnemySpawnerToList(EnemySpawner spawner)
     {
         if (!_enemySpawners.Contains(spawner))
@@ -52,19 +68,29 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
     {
         _enemySpawners.Remove(spawner);
     }
+    #endregion
 
-    private void Start()
+    #region Game Manager Connections
+    public void StartSpawning()
     {
-        foreach (var round in Rounds)
-            round.EnsureEnemySpawners(_enemySpawners);
+        if (!enabled) enabled = true;  // Enable this manager to spawn enemies
 
         StartCoroutine(SpawnInRound());
     }
 
+    public void StopSpawning()
+    {
+        StopAllCoroutines();    //Stop all coroutines that will stop spawning enemies
+        enabled = false;    //Disable this manager
+    }
+    #endregion
+
+    #region Spawn enemy Logic
     private IEnumerator SpawnInRound()
     {
         while (_currentRound < Rounds.Length)
         {
+            int roundIndex = _currentRound;
             RoundData currentRoundData = Rounds[_currentRound];
 
             // Wait for the round start
@@ -79,7 +105,7 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
                 foreach (var spawner in currentRoundData.relatedEnemySpawners)
                 {
                     if (spawner != null)
-                        StartCoroutine(spawner.SpawnEnemies());
+                        StartCoroutine(spawner.SpawnEnemies(roundIndex));
                 }
             }
 
@@ -91,4 +117,5 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
             }
         }
     }
+    #endregion
 }

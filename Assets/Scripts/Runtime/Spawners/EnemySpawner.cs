@@ -10,6 +10,7 @@ public class EnemySpawner : MonoBehaviour
     private List<List<EnemyCharacter>> _incomingEnemies = new();
     private EnemySpawnManager _spawnManager;
 
+    #region Initialization
     private void Awake()
     {
         _spawnManager = EnemySpawnManager.Instance;
@@ -49,19 +50,22 @@ public class EnemySpawner : MonoBehaviour
             _incomingEnemies.Add(roundEnemies);
         }
     }
+    #endregion
 
-    // Spawn Enemy Logic
-    public IEnumerator SpawnEnemies()
+    #region Spawn Enemy Logic
+    public IEnumerator SpawnEnemies(int roundIndex)
     {
-        int currentRound = _spawnManager.CurrentRound;
+        if (roundIndex < 0 || roundIndex >= _incomingEnemies.Count)
+            yield break;
 
-        foreach (var i in _incomingEnemies[currentRound - 1])
+        foreach (var i in _incomingEnemies[roundIndex])
         {
             EnemyCharacter spawnEnemy = Instantiate(i, spawnTrans.position, spawnTrans.rotation);
             spawnEnemy.defaultPath = relatedEnemyPath;
 
-            var spawnDelay = _spawnManager.Rounds[currentRound - 1].spawnDelay;
+            var spawnDelay = _spawnManager.Rounds[roundIndex].spawnDelay;
             yield return new WaitForSeconds(spawnDelay);
         }
     }
+    #endregion
 }
