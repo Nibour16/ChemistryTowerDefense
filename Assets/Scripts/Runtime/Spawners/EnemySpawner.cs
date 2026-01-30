@@ -21,32 +21,46 @@ public class EnemySpawner : MonoBehaviour
 
         if (spawnTrans == null)
             spawnTrans = transform;
-
-        InitializeInComingEnemies();
     }
 
-    private void InitializeInComingEnemies()
+    private void OnEnable()
     {
-        foreach (var enemyClass in _spawnManager.PreparedEnemies)
+        _spawnManager.AddEnemySpawnerToList(this);
+        InitializeIncomingEnemies();
+    }
+
+    private void OnDisable()
+    {
+        _spawnManager.RemoveEnemySpawnerFromList(this);
+    }
+
+    private void InitializeIncomingEnemies()
+    {
+        foreach (var round in _spawnManager.Rounds)
         {
-            int index = enemyClass.roundNumber - 1; //Set round index
+            var roundEnemies = new List<EnemyCharacter>();
 
-            // Make sure the volume of the 2D list is enough to add, otherwise we increase that volume
-            while (_incomingEnemies.Count <= index)
-                _incomingEnemies.Add(new List<EnemyCharacter>());
+            foreach(var roundEnemy in round.preparedEnemies)
+            {
+                for(int i = 0; i < roundEnemy.number; i++)
+                    roundEnemies.Add(roundEnemy.preparedEnemy);
+            }
 
-            _incomingEnemies[index].Add(enemyClass.enemyChar);  //Add enemy into the row
+            _incomingEnemies.Add(roundEnemies);
         }
     }
 
     // Spawn Enemy Logic
-    public IEnumerator SpawnEnemies(int roundNumber, float spawnDelay)
+    public IEnumerator SpawnEnemies()
     {
-        foreach(var i in _incomingEnemies[roundNumber - 1])
+        int currentRound = _spawnManager.CurrentRound;
+
+        foreach (var i in _incomingEnemies[currentRound - 1])
         {
             EnemyCharacter spawnEnemy = Instantiate(i, spawnTrans.position, spawnTrans.rotation);
             spawnEnemy.defaultPath = relatedEnemyPath;
 
+            var spawnDelay = _spawnManager.Rounds[currentRound - 1].spawnDelay;
             yield return new WaitForSeconds(spawnDelay);
         }
     }

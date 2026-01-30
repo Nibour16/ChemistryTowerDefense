@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4765209457221677073, guid: aba746180da7b40479ac47bd7be8d423, type: 3}
+      propertyPath: length
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5604960665072879708, guid: aba746180da7b40479ac47bd7be8d423, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
@@ -285,6 +289,10 @@ PrefabInstance:
       value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
       propertyPath: enemySpawners.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -296,6 +304,10 @@ PrefabInstance:
       propertyPath: 'enemySpawners.Array.data[0]'
       value: 
       objectReference: {fileID: 248465003}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.data[0].spawnDelay
+      value: 1.25
+      objectReference: {fileID: 0}
     - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
       propertyPath: preparedEnemies.Array.data[0].enemyChar
       value: 
@@ -309,6 +321,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3474557390036982343, guid: 3c4380c3c2b03fc46b58102e130220d6, type: 3}
     - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.data[0].waitTimeBeforeSpawn
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
       propertyPath: preparedEnemies.Array.data[0].roundNumber
       value: 1
       objectReference: {fileID: 0}
@@ -320,6 +336,34 @@ PrefabInstance:
       propertyPath: preparedEnemies.Array.data[2].roundNumber
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.data[0].enemySpawners.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.data[0].preparedEnemies.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: 'rounds.Array.data[0].enemySpawners.Array.data[0]'
+      value: 
+      objectReference: {fileID: 248465003}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.data[0].relatedEnemySpawners.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: 'rounds.Array.data[0].relatedEnemySpawners.Array.data[0]'
+      value: 
+      objectReference: {fileID: 248465003}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.data[0].preparedEnemies.Array.data[0].number
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1427949937938482471, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
+      propertyPath: rounds.Array.data[0].preparedEnemies.Array.data[0].preparedEnemy
+      value: 
+      objectReference: {fileID: 3474557390036982343, guid: 3c4380c3c2b03fc46b58102e130220d6, type: 3}
     - target: {fileID: 4735586518712528654, guid: e4123c931b5cc724c9425bba5c782e8d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5872386

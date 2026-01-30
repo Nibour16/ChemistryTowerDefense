@@ -1,37 +1,94 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PreparedEnemy
+public class PreparedEnemies
 {
-    [Min(1)] public int roundNumber = 1;
-    public EnemyCharacter enemyChar;
+    public EnemyCharacter preparedEnemy;
+    [Min(1)] public int number = 1;
+}
+
+[System.Serializable]
+public class RoundData
+{
+    public PreparedEnemies[] preparedEnemies;
+    public EnemySpawner[] relatedEnemySpawners;
+
+    [Min(0)] public float waitTimeBeforeSpawn = 20f;
+    [Min(0)] public float spawnDelay = 0;
+
+    public void EnsureEnemySpawners(List<EnemySpawner> activeSpawners)
+    {
+        if (relatedEnemySpawners == null ||
+            relatedEnemySpawners.Length == 0)
+        {
+            relatedEnemySpawners = activeSpawners.ToArray();
+            //If not explicitly assigned, use all active spawners as default
+        }
+    }
 }
 
 public class EnemySpawnManager : Singleton<EnemySpawnManager>
 {
-    [Header("Spawn Inputs")]
-    [SerializeField] private PreparedEnemy[] preparedEnemies;
-    [SerializeField] private EnemySpawner[] enemySpawners;
-    [SerializeField] private float waitTime = 3f;
+    [SerializeField] private RoundData[] rounds;
+    
+    public RoundData[] Rounds => rounds;
+    private readonly List<EnemySpawner> _enemySpawners = new();
 
-    [Header("Test Inputs")]
-    [SerializeField] private int testRound = 1;
-    [SerializeField] private float testSpawnDelay = 0.5f;
+    private int _currentRound = 0;
+    private bool _isFianlRound = false;
 
-    public PreparedEnemy[] PreparedEnemies => preparedEnemies;
+    public int CurrentRound => _currentRound;
+    public bool IsFinalRound => _isFianlRound;
+
+    public void AddEnemySpawnerToList(EnemySpawner spawner)
+    {
+        if (!_enemySpawners.Contains(spawner))
+            _enemySpawners.Add(spawner);
+    }
+
+    public void RemoveEnemySpawnerFromList(EnemySpawner spawner)
+    {
+        _enemySpawners.Remove(spawner);
+    }
 
     private void Start()
     {
-        StartCoroutine(TestSpawn());
+        foreach (var round in Rounds)
+            round.EnsureEnemySpawners(_enemySpawners);
+
+        StartCoroutine(SpawnInRound());
     }
 
-    private IEnumerator TestSpawn()
+    private IEnumerator SpawnInRound()
     {
-        //Testing only
-        yield return new WaitForSeconds(waitTime);
-        
-        foreach (var spawner in enemySpawners)
-            StartCoroutine(spawner.SpawnEnemies(testRound, testSpawnDelay));
+        while (_currentRound < Rounds.Length)
+        {
+            RoundData currentRoundData = Rounds[_currentRound];
+
+            // Wait for the round start
+            yield return new WaitForSeconds(currentRoundData.waitTimeBeforeSpawn);
+
+            // Update the current round
+            _currentRound++;
+
+            // spawn enemies during the round
+            if (currentRoundData.relatedEnemySpawners != null)
+            {
+                foreach (var spawner in currentRoundData.relatedEnemySpawners)
+                {
+                    if (spawner != null)
+                        StartCoroutine(spawner.SpawnEnemies());
+                }
+            }
+
+            // Is the final round?
+            if (_currentRound == Rounds.Length)
+            {
+                _isFianlRound = true;
+                Debug.Log("Final round!");
+            }
+        }
     }
 }
