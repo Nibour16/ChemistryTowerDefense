@@ -109,7 +109,11 @@ public class EnemyMove : MonoBehaviour
         reachEnd?.OnEnemyReachEnd(this);
 
         // Call Game Over Method if the end of the path is the enemy's goal
-        if(_callGameOverIfReachEnd)  Debug.Log("Game over");
+        if (_callGameOverIfReachEnd)
+        {
+            Destroy(gameObject);
+            Debug.Log("Game over");
+        }
     }
     #endregion
 }
