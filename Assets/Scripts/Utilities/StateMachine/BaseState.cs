@@ -2,10 +2,10 @@ public abstract class BaseState
 {
     protected BaseStateMachine stateMachine; //Owning state machine
 
-    //Composer
+    // Composer
     protected BaseState(BaseStateMachine stateMachine)
     {
-        //Cache this state machine owned by the state itself
+        // Cache this state machine owned by the state itself
         this.stateMachine = stateMachine;
     }
 
