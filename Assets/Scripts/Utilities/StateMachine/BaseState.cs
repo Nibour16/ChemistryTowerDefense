@@ -9,6 +9,11 @@ public abstract class BaseState
         this.stateMachine = stateMachine;
     }
 
+    protected T GetStateMachine<T>() where T : BaseStateMachine
+    {
+        return stateMachine as T;
+    }
+
     public abstract void EnterState();
     public abstract void UpdateState();
     public abstract void ExitState();

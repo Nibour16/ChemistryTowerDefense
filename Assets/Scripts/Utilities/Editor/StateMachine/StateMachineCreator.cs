@@ -27,7 +27,7 @@ public class {0} : BaseStateMachine
 
     private void Awake()
     {{
-        // TODO: Initialize states here
+        // TODO: Initialize states and components here
         // Example: _someState = new SomeState(this);
     }}
 

@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class PreparationState : BaseState
+public class BattleState : BaseState
 {
     private GameStateMachine _stateMachine;
 
     #region Initialization
-    public PreparationState(BaseStateMachine  stateMachine) : base(stateMachine) 
+    public BattleState(BaseStateMachine  stateMachine) : base(stateMachine) 
     {
         ResolveDependencies();
     }
@@ -15,7 +15,7 @@ public class PreparationState : BaseState
         _stateMachine = GetStateMachine<GameStateMachine>();
         if (_stateMachine == null)
         {
-            Debug.LogError($"{nameof(PreparationState)} requires {nameof(GameStateMachine)}");
+            Debug.LogError($"{nameof(BattleState)} requires {nameof(GameStateMachine)}");
         }
     }
     #endregion
@@ -23,14 +23,11 @@ public class PreparationState : BaseState
     #region State Lifecycle
     public override void EnterState() 
     {
-        _stateMachine.GameManager.StartCountDown();
+        _stateMachine.GameManager.OnBattleStart();
     }
     public override void UpdateState() 
     {
-        _stateMachine.GameManager.UpdateCountdown();
-
-        if (_stateMachine.GameManager.CurrentCountDown <= 0)
-            _stateMachine.SetState(_stateMachine.BattleState);
+        
     }
     public override void ExitState() 
     {

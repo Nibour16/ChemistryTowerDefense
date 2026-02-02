@@ -10,8 +10,25 @@ public class StateCreator : BaseScriptCreator
 
 public class {0} : BaseState
 {{
-    public {0}({1} stateMachine) : base(stateMachine) {{ }}
+    private {1} _stateMachine;
 
+    #region Initialization
+    public {0}(BaseStateMachine  stateMachine) : base(stateMachine) 
+    {{
+        ResolveDependencies();
+    }}
+
+    private void ResolveDependencies()
+    {{
+        _stateMachine = GetStateMachine<{1}>();
+        if (_stateMachine == null)
+        {{
+            Debug.LogError($""{{nameof({0})}} requires {{nameof({1})}}"");
+        }}
+    }}
+    #endregion
+
+    #region State Lifecycle
     public override void EnterState() 
     {{
         // TODO: write logic when entering this state here
@@ -24,6 +41,7 @@ public class {0} : BaseState
     {{
         // TODO: write logic when exiting this state here
     }}
+    #endregion
 }}";
 
     [MenuItem("Assets/Create/Scripting/State", priority = 80)]

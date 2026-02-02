@@ -38,11 +38,18 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
 
     private int _currentRound = 0;
     private bool _isFianlRound = false;
+    private Coroutine _spawnRoutine;
 
     public int CurrentRound => _currentRound;
     public bool IsFinalRound => _isFianlRound;
 
     #region Initialization
+    protected override void Awake()
+    {
+        base.Awake();
+        enabled = false; //By default will disable it first
+    }
+
     private void OnEnable()
     {
         foreach (var enemySpawner in _enemySpawners)
@@ -73,15 +80,25 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
     #region Game Manager Connections
     public void StartSpawning()
     {
-        if (!enabled) enabled = true;  // Enable this manager to spawn enemies
+        if (_spawnRoutine != null)  //If spawning system is already triggered, do nothing
+            return;
 
-        StartCoroutine(SpawnInRound());
+        // Enable spawning logic
+        if (!enabled) enabled = true;
+        _spawnRoutine = StartCoroutine(SpawnInRound());
     }
 
     public void StopSpawning()
     {
-        StopAllCoroutines();    //Stop all coroutines that will stop spawning enemies
-        enabled = false;    //Disable this manager
+        // Stop all coroutines that will stop spawning enemies,
+        
+        if (_spawnRoutine != null) //If the spawning system has been triggered
+        {
+            StopCoroutine(_spawnRoutine);
+            _spawnRoutine = null;
+        }
+
+        enabled = false; //Always disable this manager while stopping
     }
     #endregion
 
@@ -99,13 +116,16 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
             // Update the current round
             _currentRound++;
 
-            // spawn enemies during the round
+            // Spawn enemies during the round
             if (currentRoundData.relatedEnemySpawners != null)
             {
                 foreach (var spawner in currentRoundData.relatedEnemySpawners)
                 {
                     if (spawner != null)
+                    {
+                        Debug.Log("Spawn enemy");
                         StartCoroutine(spawner.SpawnEnemies(roundIndex));
+                    }
                 }
             }
 
