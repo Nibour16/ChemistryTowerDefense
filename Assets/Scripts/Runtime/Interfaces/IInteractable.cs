@@ -1,7 +1,7 @@
 /* --------------------------------------------------------------------------------------------
  * Interface that contains all methods about player interaction
  * -------------------------------------------------------------------------------------------- */
-interface IInteractable
+public interface IInteractable
 {
     void OnHovered();
     void OnHoverExit();
