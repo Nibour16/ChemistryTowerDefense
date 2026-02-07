@@ -2,22 +2,28 @@ using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
 {
-    // Leave a tiny space as when telling enemy reach a point
+    [Header("Advanced")]
+    // Allow small buffer to tell that enemy has reached a point
+    [Min(0f)]
     [SerializeField] private float reachDistance = 0.05f;
 
     // Variables that are ready to cache
     private bool _callGameOverIfReachEnd = true;
     private bool _isGroundEnemy = true;
 
-    private EnemyPath _enemyPath; //Enemy path reference that enemy can use to follow
-    private EnemyCharacter _enemy;  //Enemy character reference that can share the stats
+    private GameManager _gameManager; // Game Manager reference
+    private EnemyPath _enemyPath; // Enemy path reference that enemy can use to follow
+    private EnemyCharacter _enemy;  // Enemy character reference that can share the stats
 
-    private Vector3[] _pathPoints;  //Path points data that gets from the enemy path
-    private int _currentPathPointIndex = 0; //Enemy's current path point arrived
+    private Vector3[] _pathPoints;  // Path points data that gets from the enemy path
+    private int _currentPathPointIndex = 0; // Enemy's current path point arrived
+    private Vector3 _currentPoint;
+    private Vector3 _dir;
 
     private void Awake()
     {
-        _enemy = GetComponent<EnemyCharacter>(); //Assign enemy character class reference
+        _gameManager = GameManager.Instance;
+        _enemy = GetComponent<EnemyCharacter>(); // Assign enemy character class reference
 
         // Cache variables during awake
         _isGroundEnemy = _enemy.IsGroundEnemy;
@@ -32,9 +38,9 @@ public class EnemyMove : MonoBehaviour
         {
             Debug.LogError("Enemy path is null");
             return;
-        }//Prevent giving null reference, usually for safety case
+        }// Prevent giving null reference, usually for safety case
 
-        _enemyPath = enemyPath; //Bind enemy path from input path (line renderer)
+        _enemyPath = enemyPath; // Bind enemy path from input path (line renderer)
 
         // Cache path points data
         _pathPoints = _enemyPath.PathPoints;
@@ -63,32 +69,50 @@ public class EnemyMove : MonoBehaviour
 
     private void MoveToNextPoint()
     {
-        Vector3 target = _pathPoints[_currentPathPointIndex];   //Get target position 
-        Vector3 dir = target - transform.position;  //Get target direction
-        if (_isGroundEnemy) dir.y = 0f; //Lock y direction to 0 for 3d ground tower defense
+        UpdateDirectionAndTarget();
+        Vector3 detectDir = _dir;
+
+        HandleRotation(_dir); // Enemy always look at front, so they will look definitely "walking
 
         // Calculate the size of the moving step
-        float step = _enemy.GetCurrentMoveSpeed() * Time.deltaTime; 
+        float step = _enemy.GetCurrentMoveSpeed() * Time.deltaTime;
+        float reachDistance = this.reachDistance;
 
-        if (dir.magnitude <= reachDistance) //If reach the target point
+        float reachDistanceCurrent = 
+            (_currentPathPointIndex >= _pathPoints.Length - 1 && _callGameOverIfReachEnd)
+            ? 0f  // Final point, must be precise
+            : reachDistance; // Middle points, can be a tiny space
+
+        if (detectDir.magnitude <= reachDistance) // If reach the target point
         {
-            //Next target will be the next point
+            // Next target will be the next point
             _currentPathPointIndex++;
+            UpdateDirectionAndTarget();
+
+            var reachPoint = GetComponentInChildren<IEnemyReachPoint>();
+            reachPoint?.OnEnemyReachPoint(this, _currentPathPointIndex);
 
             // If reach the last point
             if (_currentPathPointIndex >= _pathPoints.Length)
-                OnReachEnd();   //Handle reach end logic
+            {
+                OnReachEnd();   // Handle reach end logic
+                return; // Stop moving
+            } 
         }
-        else
-        {
-            HandleRotation(dir);
-            transform.position += transform.forward * step;    //Moving logic
-        }
+
+        transform.position = Vector3.MoveTowards(transform.position, _currentPoint, step); //Moving Logic
+    }
+
+    private void UpdateDirectionAndTarget()
+    {
+        _currentPoint = _pathPoints[_currentPathPointIndex];   // Get target position 
+        _dir = _currentPoint - transform.position;  // Get target direction"
+        if (_isGroundEnemy) _dir.y = 0f; // Lock y direction to 0 for 3d ground tower defense
     }
 
     private void HandleRotation(Vector3 dir)
     {
-        //Rotate to look at the target point
+        // Rotate to look at the target point
         if (dir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(dir);
@@ -102,17 +126,17 @@ public class EnemyMove : MonoBehaviour
 
     private void OnReachEnd()
     {
-        enabled = false;    //Stop moving
+        enabled = false;    // Stop moving
 
-        var reachEnd = GetComponentInChildren<IEnemyReachEnd>();
+        var reachPoint = GetComponentInChildren<IEnemyReachEnd>();
         // Call method from the interface component if the enemy object has
-        reachEnd?.OnEnemyReachEnd(this);
+        reachPoint?.OnEnemyReachEnd(this);
 
         // Call Game Over Method if the end of the path is the enemy's goal
         if (_callGameOverIfReachEnd)
         {
             Destroy(gameObject);
-            Debug.Log("Game over");
+            _gameManager.OnEnemyReachFinalEnd();
         }
     }
     #endregion

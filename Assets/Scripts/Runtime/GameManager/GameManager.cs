@@ -45,4 +45,9 @@ public class GameManager : Singleton<GameManager>
         }
     }
     #endregion
+
+    public void OnEnemyReachFinalEnd()
+    {
+        Debug.Log("Game Over!!");
+    }
 }
