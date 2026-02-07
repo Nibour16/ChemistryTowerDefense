@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2225547396896514006}
+  - component: {fileID: 7060733829546035463}
   - component: {fileID: 1548894941163784057}
   m_Layer: 0
   m_Name: Ground
@@ -33,6 +34,21 @@ Transform:
   - {fileID: 4932353343708313039}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7060733829546035463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3457358489072473376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71186aa3e3b7035439db701d625ab8f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridGenerator3D
+  _cellSize: 1
+  maxGridWidth: 30
+  maxGridHeight: 30
 --- !u!65 &1548894941163784057
 BoxCollider:
   m_ObjectHideFlags: 0
