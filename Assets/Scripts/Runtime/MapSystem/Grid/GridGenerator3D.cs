@@ -42,16 +42,25 @@ public class GridGenerator3D : MonoBehaviour
 
     private void GenerateGrid()
     {
-        _gridSize = _groundMesh.bounds.size;
+        var bounds = _groundMesh.bounds;
+        _gridSize = bounds.size;
 
         _gridWidth = Mathf.Min(Mathf.FloorToInt(_gridSize.x / _cellSize), maxGridWidth);
         _gridHeight = Mathf.Min(Mathf.FloorToInt(_gridSize.z / _cellSize), maxGridHeight);
 
-        // Starting from left-down corner point
-        _origin = transform.position - _gridSize / 2f + new Vector3(_cellSize / 2f, 0, _cellSize / 2f);
+        _fixedY = bounds.max.y; // The grid must be on the top of the ground
 
-        // Lock Y position
-        _fixedY = _groundMesh.bounds.max.y; // The grid must be on the top of the ground
+        float gridWorldSizeX = _gridWidth * _cellSize;
+        float gridWorldSizeZ = _gridHeight * _cellSize;
+
+        float padX = (_gridSize.x - gridWorldSizeX) * 0.5f;
+        float padZ = (_gridSize.z - gridWorldSizeZ) * 0.5f;
+
+        _origin = new Vector3(
+            bounds.min.x + padX + _cellSize * 0.5f,
+            _fixedY,
+            bounds.min.z + padZ + _cellSize * 0.5f
+        );
     }
     #endregion
 }

@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMove
   reachDistance: 0.05
+  neverAcrossPointWhileReaching: 0
 --- !u!1 &3947358824246097671
 GameObject:
   m_ObjectHideFlags: 0

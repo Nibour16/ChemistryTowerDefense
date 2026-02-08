@@ -8,6 +8,8 @@ public class TowerSnapper : MonoBehaviour
     private void Awake()
     {
         _gridManager = GridManager.Instance;
+        if (_gridManager == null)
+            Debug.LogError("Grid Manager is not found");
     }
 
     private void Update()

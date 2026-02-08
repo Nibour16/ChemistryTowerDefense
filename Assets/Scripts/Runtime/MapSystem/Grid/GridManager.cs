@@ -9,9 +9,10 @@ public enum GridCellState
 public class GridCellData
 {
     public BaseTower tower;
-    public GridCellState state;
+    public GridCellState state = GridCellState.Empty;
 }
 
+[RequireComponent(typeof(GridGenerator3D))]
 public class GridManager : Singleton<GridManager>
 {
     private GridGenerator3D _grid; // Grid reference

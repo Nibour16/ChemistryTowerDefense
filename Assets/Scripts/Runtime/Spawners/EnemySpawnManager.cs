@@ -52,17 +52,23 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
 
     private void OnEnable()
     {
-        foreach (var enemySpawner in _enemySpawners)
-            enemySpawner.enabled = true;
+        var spawners = _enemySpawners.ToArray();
 
-        foreach (var round in Rounds)
-            round.EnsureEnemySpawners(_enemySpawners);
+        foreach (var enemySpawner in spawners)
+            if (enemySpawner) enemySpawner.enabled = true;
+
+        var rounds = this.rounds;
+
+        foreach (var round in rounds)
+            round?.EnsureEnemySpawners(_enemySpawners);
     }
 
     private void OnDisable()
     {
-        foreach (var enemySpawner in _enemySpawners)
-            enemySpawner.enabled = false;
+        var spawners = _enemySpawners.ToArray();
+
+        foreach (var enemySpawner in spawners)
+            if(enemySpawner) enemySpawner.enabled = false;
     }
 
     public void AddEnemySpawnerToList(EnemySpawner spawner)

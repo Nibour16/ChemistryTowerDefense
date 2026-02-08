@@ -6,6 +6,7 @@ public class EnemyMove : MonoBehaviour
     // Allow small buffer to tell that enemy has reached a point
     [Min(0f)]
     [SerializeField] private float reachDistance = 0.05f;
+    [SerializeField] private bool neverAcrossPointWhileReaching = false;
 
     // Variables that are ready to cache
     private bool _callGameOverIfReachEnd = true;
@@ -78,29 +79,40 @@ public class EnemyMove : MonoBehaviour
         float step = _enemy.GetCurrentMoveSpeed() * Time.deltaTime;
         float reachDistance = this.reachDistance;
 
-        float reachDistanceCurrent = 
-            (_currentPathPointIndex >= _pathPoints.Length - 1 && _callGameOverIfReachEnd)
-            ? 0f  // Final point, must be precise
-            : reachDistance; // Middle points, can be a tiny space
+        bool isReachPathEnd = false;
+
+        float reachDistanceCurrent = reachDistance; // Middle points, can be a tiny space
+        if (_currentPathPointIndex >= _pathPoints.Length - 1)
+        {
+            isReachPathEnd = true;
+
+            if (_callGameOverIfReachEnd)
+                reachDistanceCurrent = 0f;  // Final point, must be precise
+        }
 
         if (detectDir.magnitude <= reachDistance) // If reach the target point
         {
             // Next target will be the next point
             _currentPathPointIndex++;
-            UpdateDirectionAndTarget();
+
+            if (!isReachPathEnd)
+                UpdateDirectionAndTarget();
 
             var reachPoint = GetComponentInChildren<IEnemyReachPoint>();
             reachPoint?.OnEnemyReachPoint(this, _currentPathPointIndex);
 
             // If reach the last point
-            if (_currentPathPointIndex >= _pathPoints.Length)
+            if (isReachPathEnd)
             {
                 OnReachEnd();   // Handle reach end logic
                 return; // Stop moving
             } 
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, _currentPoint, step); //Moving Logic
+        if (neverAcrossPointWhileReaching)
+            transform.position = Vector3.MoveTowards(transform.position, _currentPoint, step);
+        else
+            transform.position += transform.forward * step; //Moving Logic
     }
 
     private void UpdateDirectionAndTarget()
