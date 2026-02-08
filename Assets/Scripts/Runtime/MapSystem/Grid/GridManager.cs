@@ -14,7 +14,7 @@ public class GridCellData
 
 public class GridManager : Singleton<GridManager>
 {
-    private GridGenerator3D _grid;
+    private GridGenerator3D _grid; // Grid reference
     private GridCellData[,] _gridData; // Grid data collector
 
     public GridCellData[,] GridData => _gridData;
@@ -23,7 +23,6 @@ public class GridManager : Singleton<GridManager>
     {
         base.Awake();
         _grid = GetComponent<GridGenerator3D>();
-
         InitializeTowerGrid();
     }
 
@@ -55,6 +54,17 @@ public class GridManager : Singleton<GridManager>
 
     public void UpdateData(GridCellData newData, int row, int column)
     {
+        if (_gridData == null)
+            return;
 
+        if (row < 0 || row >= _grid.GridWidth ||
+            column < 0 || column >= _grid.GridHeight)
+            return;
+
+        if (_gridData[row, column] == null)
+            _gridData[row, column] = new GridCellData();
+
+        _gridData[row, column].tower = newData.tower;
+        _gridData[row, column].state = newData.state;
     }
 }

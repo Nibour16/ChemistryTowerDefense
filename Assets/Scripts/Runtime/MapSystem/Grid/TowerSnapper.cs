@@ -3,11 +3,11 @@ using UnityEngine;
 public class TowerSnapper : MonoBehaviour
 {
     [SerializeField] private bool snappingDuringUpdate = false;
-    private GridManager _gridDataManager;
+    private GridManager _gridManager;
 
     private void Awake()
     {
-        _gridDataManager = GridManager.Instance;
+        _gridManager = GridManager.Instance;
     }
 
     private void Update()
@@ -18,11 +18,48 @@ public class TowerSnapper : MonoBehaviour
 
     private void SnapAllTowers()
     {
+        GridCellData[,] grid = _gridManager.GridData;
 
+        // Data is empty, no need to snap
+        if (grid == null)
+            return;
+
+        // Get width and height
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
+            {
+                GridCellData cell = grid[x, z];
+                if (cell == null || cell.tower == null)
+                    continue;
+
+                SnapTower(cell.tower);
+            }
+        }
     }
 
-    public void SnapTower()
+    public void SnapTower(BaseTower tower)
     {
+        if (tower == null)
+            return;
 
+        Vector3 worldPos = tower.transform.position;
+
+        if (!_gridManager.WorldToCell(worldPos, out int x, out int z))
+            return;
+
+        Vector3 snappedPos = _gridManager.GetCellCenter(x, z);
+        tower.transform.position = snappedPos;
+
+        GridCellData data = new GridCellData
+        {
+            tower = tower,
+            state = GridCellState.NotPlaceable
+        };
+
+        _gridManager.UpdateData(data, x, z);
     }
 }
