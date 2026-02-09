@@ -14,6 +14,16 @@ public class GridVisualizer : MonoBehaviour
     private GridManager _gridManager;
     private GridGenerator3D _gridGenerator;
 
+    #region Cache runtime context
+    private Transform _root;
+    private GridCellData[,] _cachedData;
+    private float _cachedCellSize;
+    private float _cachedY;
+    private int _cachedWidth;
+    private int _cachedHeight;
+    #endregion
+
+    #region Initialization
     private void Awake()
     {
         _gridManager = GridManager.Instance;
@@ -25,7 +35,7 @@ public class GridVisualizer : MonoBehaviour
         
         _gridGenerator = GetComponent<GridGenerator3D>();
     }
-
+    
     private void Start()
     {
         CreateVisualGrid();
@@ -36,16 +46,42 @@ public class GridVisualizer : MonoBehaviour
         if (!TryCacheGridInfo(out float cell, out int w, out int h, out Vector3 corner, out float y))
             return;
 
-        Transform root = CreateOrReplaceRoot();
+        _root = CreateOrReplaceRoot();
 
-        if(displayGridLine)
-            DrawGridLines(root, corner, y, cell, w, h);
+        _cachedCellSize = cell;
+        _cachedWidth = w;
+        _cachedHeight = h;
+        _cachedY = y;
 
-        var data = _gridManager.GridData;
-        if (data == null) return;
+        if (displayGridLine)
+            DrawGridLines(_root, corner, _cachedY, _cachedCellSize, _cachedWidth, _cachedHeight);
+
+        _cachedData = _gridManager.GridData;
+
+        if (_cachedData == null) return;
 
         if (displayCellMarkers)
-            DrawCellMarkers(root, data, y, cell, w, h);
+            DrawCellMarkers(_root, _cachedData, _cachedY, _cachedCellSize, _cachedWidth, _cachedHeight);
+    }
+    #endregion
+
+    // This is how other script component update a cell marker
+    public void UpdateCellMarker(int x, int z)
+    {
+        if (_root == null || _cachedData == null)
+            return;
+
+        if (x < 0 || x >= _cachedWidth || z < 0 || z >= _cachedHeight)
+            return;
+
+        SetCellMarker(
+            _root,
+            _cachedData,
+            x,
+            z,
+            _cachedY,
+            _cachedCellSize
+        );
     }
 
     #region Core Handler
@@ -128,24 +164,39 @@ public class GridVisualizer : MonoBehaviour
     }
     #endregion
 
-    #region Cell Marker Drawer
-    private void DrawCellMarkers(Transform root, GridCellData[,] data, float y, float cell, int w, int h)
+    #region Cell Markers Main Drawer
+    private void DrawCellMarkers(
+        Transform root, 
+        GridCellData[,] data, 
+        float y, float cell, 
+        int w, int h)
     {
         for (int x = 0; x < w; x++)
         {
             for (int z = 0; z < h; z++)
             {
-                GridCellState state = data[x, z]?.state ?? GridCellState.Empty;
-                Color c = state == GridCellState.NotPlaceable ? blockedColour : emptyColour;
-
-                Vector3 center = _gridManager.GetCellCenter(x, z);
-                center.y = y - 0.01f;
-
-                GameObject marker = CreateCellMarker(root, x, z, center);
-                SetMarkerWorldScale(marker.transform, cell);
-                SetMarkerColor(marker, c);
+                SetCellMarker(root, data, x, z, y, cell);
             }
         }
+    }
+    #endregion
+
+    #region Single Cell Marker Creator
+    private void SetCellMarker(
+        Transform root,
+        GridCellData[,] data,
+        int x, int z,
+        float y, float cell)
+    {
+        GridCellState state = data[x, z]?.state ?? GridCellState.Empty;
+        Color c = state == GridCellState.NotPlaceable ? blockedColour : emptyColour;
+
+        Vector3 center = _gridManager.GetCellCenter(x, z);
+        center.y = y - 0.01f;
+
+        GameObject marker = CreateCellMarker(root, x, z, center);
+        SetMarkerWorldScale(marker.transform, cell);
+        SetMarkerColor(marker, c);
     }
 
     private GameObject CreateCellMarker(Transform root, int x, int z, Vector3 worldPos)

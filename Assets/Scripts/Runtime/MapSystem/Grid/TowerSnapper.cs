@@ -56,12 +56,12 @@ public class TowerSnapper : MonoBehaviour
         Vector3 snappedPos = _gridManager.GetCellCenter(x, z);
         tower.transform.position = snappedPos;
 
-        GridCellData data = new GridCellData
+        /*GridCellData data = new GridCellData
         {
             tower = tower,
             state = GridCellState.NotPlaceable
         };
 
-        _gridManager.UpdateData(data, x, z);
+        _gridManager.UpdateData(data, x, z);*/
     }
 }
