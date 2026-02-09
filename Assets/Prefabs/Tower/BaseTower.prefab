@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2532025263253427435}
   - component: {fileID: 7574672342465583099}
   - component: {fileID: 7576907081913096320}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: BaseTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,7 +110,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 705562940022422379}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Abilities
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 9200872971977314588}
   - component: {fileID: 4486353227838014053}
   - component: {fileID: 5616196315025227737}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
