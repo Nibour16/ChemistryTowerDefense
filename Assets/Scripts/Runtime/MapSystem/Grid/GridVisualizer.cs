@@ -1,9 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(GridGenerator3D))]
 public class GridVisualizer : BaseGridSystem
 {
-    [Header("Visual Setting")]
+    [Header("Debug Visual Setting")]
     [SerializeField] private bool displayCellMarkers = true;
     [SerializeField] private bool displayGridLine = true;
 
@@ -20,12 +19,26 @@ public class GridVisualizer : BaseGridSystem
     private int _cachedHeight;
     #endregion
 
-    #region Initialization
-    private void Start()
+    #region System Initialization
+    private void OnEnable()
     {
+        ClearVisualGrid();
         CreateVisualGrid();
+
+        if (displayCellMarkers && gridManager != null)
+            gridManager.OnCellDataUpdated += UpdateCellMarker;
     }
 
+    private void OnDisable()
+    {
+        if (gridManager != null)
+            gridManager.OnCellDataUpdated -= UpdateCellMarker;
+
+        ClearVisualGrid();
+    }
+    #endregion
+
+    #region Grid Initialization
     private void CreateVisualGrid() // Leading method
     {
         if (!TryCacheGridInfo(out float cell, out int w, out int h, out Vector3 corner, out float y))
@@ -48,10 +61,18 @@ public class GridVisualizer : BaseGridSystem
         if (displayCellMarkers)
             DrawCellMarkers(_root, _cachedData, _cachedY, _cachedCellSize, _cachedWidth, _cachedHeight);
     }
-    #endregion
+
+    private void ClearVisualGrid()
+    {
+        if (_root != null)
+        {
+            Destroy(_root.gameObject);
+            _root = null;
+        }
+    }
 
     // This is how other script component update a cell marker
-    public void UpdateCellMarker(int x, int z)
+    private void UpdateCellMarker(int x, int z)
     {
         if (_root == null || _cachedData == null)
             return;
@@ -68,6 +89,7 @@ public class GridVisualizer : BaseGridSystem
             _cachedCellSize
         );
     }
+    #endregion
 
     #region Core Handlers
     private bool TryCacheGridInfo(out float cell, out int w, out int h, out Vector3 corner, out float y)

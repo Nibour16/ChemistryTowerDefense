@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum GridCellState
@@ -13,29 +14,32 @@ public class GridCellData
 }
 
 [RequireComponent(typeof(GridGenerator3D))]
+[RequireComponent(typeof(GridDetector))]
 public class GridManager : Singleton<GridManager>
 {
+    // Secretary class components of grid system
     private GridGenerator3D _gridGenerator; // Grid generator reference
     private GridDetector _gridDetector; // Grid detector reference
-    private GridCellData[,] _gridData; // Grid data collector
+    
+    // Grid system data collector
+    private GridCellData[,] _gridData;
 
+    // Subject during data update
+    public event Action<int, int> OnCellDataUpdated;
+
+    // Properties of secretary classes
     public GridGenerator3D GridGenerator => _gridGenerator;
     public GridDetector GridDetector => _gridDetector;
     public GridCellData[,] GridData => _gridData;
 
+    #region Initialization
     protected override void Awake()
     {
         base.Awake();
 
-        // This will handle the 
+        // Assign the secretary components that allows system members to apply
         _gridGenerator = GetComponent<GridGenerator3D>();
         _gridDetector = GetComponent<GridDetector>();
-
-        if (_gridGenerator == null)
-            Debug.LogError("GridGenerator3D missing");
-
-        if (_gridDetector == null)
-            Debug.LogError("GridDetector missing");
 
         // Assign all grid secretary components about their manager
         _gridDetector?.BindManager(this);
@@ -51,7 +55,9 @@ public class GridManager : Singleton<GridManager>
         int h = _gridGenerator.GridHeight;
         _gridData = new GridCellData[w, h];
     }
+    #endregion
 
+    #region Grid Translator Methods
     // Get world position of the center of the grid cell
     public Vector3 GetCellCenter(int x, int z)
     {
@@ -70,7 +76,9 @@ public class GridManager : Singleton<GridManager>
         z = Mathf.FloorToInt(localPos.z / _gridGenerator.CellSize);
         return x >= 0 && x < _gridGenerator.GridWidth && z >= 0 && z < _gridGenerator.GridHeight;
     }
+    #endregion
 
+    // Data Update Handler
     public void UpdateData(GridCellData newData, int row, int column)
     {
         if (_gridData == null)
@@ -85,5 +93,7 @@ public class GridManager : Singleton<GridManager>
 
         _gridData[row, column].tower = newData.tower;
         _gridData[row, column].state = newData.state;
+
+        OnCellDataUpdated?.Invoke(row, column);
     }
 }

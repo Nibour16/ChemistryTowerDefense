@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2225547396896514006}
+  - component: {fileID: 1548894941163784057}
   - component: {fileID: 9197085865992280805}
   - component: {fileID: 7060733829546035463}
-  - component: {fileID: 73063981083988201}
-  - component: {fileID: 1548894941163784057}
+  - component: {fileID: 4952832649926340175}
   - component: {fileID: 6965997586600863883}
+  - component: {fileID: 73063981083988201}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -37,6 +38,27 @@ Transform:
   - {fileID: 4932353343708313039}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1548894941163784057
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3457358489072473376}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &9197085865992280805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +86,37 @@ MonoBehaviour:
   _cellSize: 1
   maxGridWidth: 30
   maxGridHeight: 30
+--- !u!114 &4952832649926340175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3457358489072473376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffe4a3531e916441ab9a2b989261e06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridDetector
+  blockingLayers:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &6965997586600863883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3457358489072473376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d920fc0097fc2214da2fa1d4a1e4276e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridVisualizer
+  displayCellMarkers: 1
+  displayGridLine: 1
+  emptyColour: {r: 0, g: 1, b: 0, a: 0.3}
+  blockedColour: {r: 1, g: 0, b: 0, a: 0.3}
 --- !u!114 &73063981083988201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,41 +130,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerSnapper
   snappingDuringUpdate: 0
---- !u!65 &1548894941163784057
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3457358489072473376}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6965997586600863883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3457358489072473376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d920fc0097fc2214da2fa1d4a1e4276e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GridVisualizer
-  emptyColor: {r: 0, g: 1, b: 0, a: 0.3}
-  blockedColor: {r: 1, g: 0, b: 0, a: 0.3}
 --- !u!1 &4014614384815412504
 GameObject:
   m_ObjectHideFlags: 0

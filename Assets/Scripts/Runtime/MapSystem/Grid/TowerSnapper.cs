@@ -48,14 +48,6 @@ public class TowerSnapper : BaseGridSystem
         Vector3 snappedPos = gridManager.GetCellCenter(x, z);
         tower.transform.position = snappedPos;
 
-        /*GridCellData data = new GridCellData
-        {
-            tower = tower,
-            state = GridCellState.NotPlaceable
-        };
-
-        _gridManager.UpdateData(data, x, z);*/
-
         if (gridDetector != null)
         {
             gridDetector.DetectAndApplyToGrid();

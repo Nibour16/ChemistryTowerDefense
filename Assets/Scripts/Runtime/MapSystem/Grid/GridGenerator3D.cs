@@ -8,11 +8,13 @@ public class GridGenerator3D : BaseGridSecretary
 
     private MeshRenderer _groundMesh; // Ground mesh reference (mesh renderer)
 
+    #region Grid Magnitudes
     private Vector3 _gridSize; // Size of the grid
     private Vector3 _origin; // Position of left-down corner of the ground, is the origin
     private int _gridWidth;
     private int _gridHeight;
     private float _fixedY; // Fix Grid's Y-axis
+    #endregion
 
     #region Grid Properties
     public float CellSize => _cellSize;

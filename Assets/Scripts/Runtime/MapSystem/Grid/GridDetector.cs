@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public struct GridBlockInfo
@@ -12,9 +11,7 @@ public class GridDetector : BaseGridSecretary
 {
     [SerializeField] private LayerMask blockingLayers;
 
-    /// <summary>
-    /// Detect if something is on the grid
-    /// </summary>
+    #region Detect if something is on the grid
     public bool IsCellBlocked(int x, int z)
     {
         Vector3 center = gridManager.GetCellCenter(x, z);
@@ -44,10 +41,9 @@ public class GridDetector : BaseGridSecretary
 
         return hits.Length > 0;
     }
+    #endregion
 
-    /// <summary>
-    /// Check the whole grid to return the used cells
-    /// </summary>
+    // Check the whole grid to return the used cells
     public void DetectAndApplyToGrid()
     {
         int w = gridManager.GridData.GetLength(0);
@@ -58,15 +54,13 @@ public class GridDetector : BaseGridSecretary
             for (int z = 0; z < h; z++)
             {
                 bool blocked = IsCellBlocked(x, z);
+                var gridCellData = new GridCellData
+                {
+                    tower = null,
+                    state = blocked ? GridCellState.NotPlaceable : GridCellState.Empty
+                };
 
-                gridManager.UpdateData(
-                    new GridCellData
-                    {
-                        tower = null,
-                        state = blocked ? GridCellState.NotPlaceable : GridCellState.Empty
-                    },
-                    x, z
-                );
+                gridManager.UpdateData(gridCellData, x, z);
             }
         }
     }
