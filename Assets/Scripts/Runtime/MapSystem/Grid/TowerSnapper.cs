@@ -1,16 +1,8 @@
 using UnityEngine;
 
-public class TowerSnapper : MonoBehaviour
+public class TowerSnapper : BaseGridSystem
 {
     [SerializeField] private bool snappingDuringUpdate = false;
-    private GridManager _gridManager;
-
-    private void Awake()
-    {
-        _gridManager = GridManager.Instance;
-        if (_gridManager == null)
-            Debug.LogError("Grid Manager is not found");
-    }
 
     private void Update()
     {
@@ -20,7 +12,7 @@ public class TowerSnapper : MonoBehaviour
 
     private void SnapAllTowers()
     {
-        GridCellData[,] grid = _gridManager.GridData;
+        GridCellData[,] grid = gridManager.GridData;
 
         // Data is empty, no need to snap
         if (grid == null)
@@ -50,10 +42,10 @@ public class TowerSnapper : MonoBehaviour
 
         Vector3 worldPos = tower.transform.position;
 
-        if (!_gridManager.WorldToCell(worldPos, out int x, out int z))
+        if (!gridManager.WorldToCell(worldPos, out int x, out int z))
             return;
 
-        Vector3 snappedPos = _gridManager.GetCellCenter(x, z);
+        Vector3 snappedPos = gridManager.GetCellCenter(x, z);
         tower.transform.position = snappedPos;
 
         /*GridCellData data = new GridCellData
@@ -63,5 +55,10 @@ public class TowerSnapper : MonoBehaviour
         };
 
         _gridManager.UpdateData(data, x, z);*/
+
+        if (gridDetector != null)
+        {
+            gridDetector.DetectAndApplyToGrid();
+        }
     }
 }

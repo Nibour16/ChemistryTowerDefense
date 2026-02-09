@@ -8,25 +8,66 @@ public struct GridBlockInfo
     public GameObject blocker;
 }
 
-public class GridDetector : MonoBehaviour
+public class GridDetector : BaseGridSecretary
 {
     [SerializeField] private LayerMask blockingLayers;
 
+    /// <summary>
+    /// Detect if something is on the grid
+    /// </summary>
     public bool IsCellBlocked(int x, int z)
     {
-        return false;
-    }
-    public bool IsCellBlocked(Vector3 worldPos)
-    {
-        return false;
+        Vector3 center = gridManager.GetCellCenter(x, z);
+
+        return HasBlockingEntityAt(center);
     }
 
-    public BaseTower GetTowerOnCell(int x, int z)
+    public bool IsCellBlocked(Vector3 worldPos)
     {
-        return null;
+        if (!gridManager.WorldToCell(worldPos, out int x, out int z))
+            return true; // If over the grid will just return true anyway
+
+        return IsCellBlocked(x, z);
     }
-    public IEnumerable<GridBlockInfo> DetectAllOccupiedCells()
+
+    private bool HasBlockingEntityAt(Vector3 cellCenter)
     {
-        return null;
+        // must be half, preventing detecting other cells beside
+        float half = gridManager.GridGenerator.CellSize * 0.45f;
+
+        Collider[] hits = Physics.OverlapBox(
+            cellCenter,
+            new Vector3(half, 0.5f, half),
+            Quaternion.identity,
+            blockingLayers
+        );
+
+        return hits.Length > 0;
+    }
+
+    /// <summary>
+    /// Check the whole grid to return the used cells
+    /// </summary>
+    public void DetectAndApplyToGrid()
+    {
+        int w = gridManager.GridData.GetLength(0);
+        int h = gridManager.GridData.GetLength(1);
+
+        for (int x = 0; x < w; x++)
+        {
+            for (int z = 0; z < h; z++)
+            {
+                bool blocked = IsCellBlocked(x, z);
+
+                gridManager.UpdateData(
+                    new GridCellData
+                    {
+                        tower = null,
+                        state = blocked ? GridCellState.NotPlaceable : GridCellState.Empty
+                    },
+                    x, z
+                );
+            }
+        }
     }
 }

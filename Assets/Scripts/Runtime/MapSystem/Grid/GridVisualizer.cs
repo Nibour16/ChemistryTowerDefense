@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(GridGenerator3D))]
-public class GridVisualizer : MonoBehaviour
+public class GridVisualizer : BaseGridSystem
 {
     [Header("Visual Setting")]
     [SerializeField] private bool displayCellMarkers = true;
@@ -10,9 +10,6 @@ public class GridVisualizer : MonoBehaviour
     [Header("Debug Visual Colour")]
     [SerializeField] private Color emptyColour = new Color(0, 1, 0, 0.3f);
     [SerializeField] private Color blockedColour = new Color(1, 0, 0, 0.3f);
-
-    private GridManager _gridManager;
-    private GridGenerator3D _gridGenerator;
 
     #region Cache runtime context
     private Transform _root;
@@ -24,18 +21,6 @@ public class GridVisualizer : MonoBehaviour
     #endregion
 
     #region Initialization
-    private void Awake()
-    {
-        _gridManager = GridManager.Instance;
-        if (_gridManager == null)
-        {
-            Debug.LogError("Grid Manager is not found");
-            return;
-        }
-        
-        _gridGenerator = GetComponent<GridGenerator3D>();
-    }
-    
     private void Start()
     {
         CreateVisualGrid();
@@ -56,7 +41,7 @@ public class GridVisualizer : MonoBehaviour
         if (displayGridLine)
             DrawGridLines(_root, corner, _cachedY, _cachedCellSize, _cachedWidth, _cachedHeight);
 
-        _cachedData = _gridManager.GridData;
+        _cachedData = gridManager.GridData;
 
         if (_cachedData == null) return;
 
@@ -84,7 +69,7 @@ public class GridVisualizer : MonoBehaviour
         );
     }
 
-    #region Core Handler
+    #region Core Handlers
     private bool TryCacheGridInfo(out float cell, out int w, out int h, out Vector3 corner, out float y)
     {
         cell = 0f;
@@ -92,21 +77,21 @@ public class GridVisualizer : MonoBehaviour
         corner = Vector3.zero;
         y = 0f;
 
-        if (_gridGenerator == null)
+        if (gridGenerator == null)
         {
             Debug.LogError("GridGenerator3D not found on this GameObject.");
             return false;
         }
 
-        cell = _gridGenerator.CellSize;
-        w = _gridGenerator.GridWidth;
-        h = _gridGenerator.GridHeight;
+        cell = gridGenerator.CellSize;
+        w = gridGenerator.GridWidth;
+        h = gridGenerator.GridHeight;
 
         // corner is the real bottom-left corner of the grid area (not the center of cell 0,0)
-        corner = _gridGenerator.Origin - new Vector3(cell * 0.5f, 0f, cell * 0.5f);
+        corner = gridGenerator.Origin - new Vector3(cell * 0.5f, 0f, cell * 0.5f);
 
         // lift a bit to avoid z-fighting with ground
-        y = _gridGenerator.FixedY + 0.02f;
+        y = gridGenerator.FixedY + 0.02f;
 
         return true;
     }
@@ -191,7 +176,7 @@ public class GridVisualizer : MonoBehaviour
         GridCellState state = data[x, z]?.state ?? GridCellState.Empty;
         Color c = state == GridCellState.NotPlaceable ? blockedColour : emptyColour;
 
-        Vector3 center = _gridManager.GetCellCenter(x, z);
+        Vector3 center = gridManager.GetCellCenter(x, z);
         center.y = y - 0.01f;
 
         GameObject marker = CreateCellMarker(root, x, z, center);

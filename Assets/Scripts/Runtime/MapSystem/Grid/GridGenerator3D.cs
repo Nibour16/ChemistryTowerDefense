@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GridGenerator3D : MonoBehaviour
+public class GridGenerator3D : BaseGridSecretary
 {
     [SerializeField] private float _cellSize = 1f; // Size of each grid cell
     [SerializeField] private int maxGridWidth = 30; // Max width of the grid
