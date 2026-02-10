@@ -1,16 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GridVisualizer : BaseGridSystem
 {
-    [Header("Debug Visual Setting")]
+    [Header("General Setting")]
     [SerializeField] private bool displayCellMarkers = true;
     [SerializeField] private bool displayGridLine = true;
 
-    [Header("Debug Visual Colour")]
+    [Header("Debug Grid Cell Visual")]
     [SerializeField] private Color emptyColour = new Color(0, 1, 0, 0.3f);
     [SerializeField] private Color blockedColour = new Color(1, 0, 0, 0.3f);
 
+    [Header("Debug Grid Line Visual")]
+    [SerializeField] private Color gridLineColor = Color.black;
+    [Range(0.01f, 0.2f)]
+    [SerializeField] private float gridLineWidth = 0.03f;
+
     #region Cache runtime context
+    // Internal cache for debug visualizer, not suggest to be readonly
+    private Dictionary<(int x, int z), GameObject> _cellMarkers = new();
+
     private Transform _root;
     private GridCellData[,] _cachedData;
     private float _cachedCellSize;
@@ -69,6 +78,8 @@ public class GridVisualizer : BaseGridSystem
             Destroy(_root.gameObject);
             _root = null;
         }
+
+        _cellMarkers.Clear();
     }
 
     // This is how other script component update a cell marker
@@ -128,6 +139,9 @@ public class GridVisualizer : BaseGridSystem
         Transform root = new GameObject("GridVisualRoot").transform;
         root.SetParent(transform, false);
 
+        // Root must inherit the visualizer's layer
+        root.gameObject.layer = gameObject.layer;
+
         return root;
     }
     #endregion
@@ -140,7 +154,7 @@ public class GridVisualizer : BaseGridSystem
         {
             Vector3 a = new Vector3(corner.x + x * cell, y, corner.z);
             Vector3 b = new Vector3(corner.x + x * cell, y, corner.z + h * cell);
-            CreateLine(root, $"Line_X_{x}", a, b, Color.black, 0.03f);
+            CreateLine(root, $"Line_X_{x}", a, b, gridLineColor, gridLineWidth);
         }
 
         // Lines parallel to X
@@ -148,7 +162,7 @@ public class GridVisualizer : BaseGridSystem
         {
             Vector3 a = new Vector3(corner.x, y, corner.z + z * cell);
             Vector3 b = new Vector3(corner.x + w * cell, y, corner.z + z * cell);
-            CreateLine(root, $"Line_Z_{z}", a, b, Color.black, 0.03f);
+            CreateLine(root, $"Line_Z_{z}", a, b, gridLineColor, gridLineWidth);
         }
     }
 
@@ -168,6 +182,8 @@ public class GridVisualizer : BaseGridSystem
 
         lr.material = new Material(Shader.Find("Unlit/Color"));
         lr.material.color = color;
+
+        lr.gameObject.layer = parent.gameObject.layer;
     }
     #endregion
 
@@ -198,11 +214,20 @@ public class GridVisualizer : BaseGridSystem
         GridCellState state = data[x, z]?.state ?? GridCellState.Empty;
         Color c = state == GridCellState.NotPlaceable ? blockedColour : emptyColour;
 
-        Vector3 center = gridManager.GetCellCenter(x, z);
-        center.y = y - 0.01f;
+        // Try get existing marker
+        if (!_cellMarkers.TryGetValue((x, z), out GameObject marker))
+        {
+            // First time creation
+            Vector3 center = gridManager.GetCellCenter(x, z);
+            center.y = y - 0.01f;
 
-        GameObject marker = CreateCellMarker(root, x, z, center);
-        SetMarkerWorldScale(marker.transform, cell);
+            marker = CreateCellMarker(root, x, z, center);
+            SetMarkerWorldScale(marker.transform, cell);
+
+            _cellMarkers[(x, z)] = marker;
+        }
+
+        // Only update the colour
         SetMarkerColor(marker, c);
     }
 
@@ -212,6 +237,9 @@ public class GridVisualizer : BaseGridSystem
         marker.name = $"Cell_{x}_{z}";
         marker.transform.SetParent(root, false);
         marker.transform.position = worldPos;
+
+        // Root must inherit the visualizer's layer
+        marker.layer = root.gameObject.layer;
 
         Destroy(marker.GetComponent<Collider>());
         return marker;

@@ -4,7 +4,7 @@ public abstract class BaseGridSystem : MonoBehaviour
 {
     protected GridManager gridManager;
     protected GridGenerator3D gridGenerator;
-    protected GridDetector gridDetector;
+    //protected GridDetector gridDetector;
 
     protected virtual void Awake()
     {
@@ -21,10 +21,10 @@ public abstract class BaseGridSystem : MonoBehaviour
             Debug.LogError($"{GetType().Name}: GridGenerator is not assigned in GridManager");
         }
 
-        gridDetector = gridManager.GridDetector;
+        /*gridDetector = gridManager.GridDetector;
         if (gridDetector == null)
         {
             Debug.LogError($"{GetType().Name}: GridDetector is not assigned in GridManager");
-        }
+        }*/
     }
 }

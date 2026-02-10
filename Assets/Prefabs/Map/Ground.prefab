@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 9197085865992280805}
   - component: {fileID: 7060733829546035463}
   - component: {fileID: 4952832649926340175}
-  - component: {fileID: 6965997586600863883}
-  - component: {fileID: 73063981083988201}
-  m_Layer: 0
+  - component: {fileID: 5669893789228101346}
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4932353343708313039}
+  - {fileID: 7894879440257146835}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1548894941163784057
@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab24d91733526bc4fb011ebb2cfb37ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
+  blockerCollector: {fileID: 0}
 --- !u!114 &7060733829546035463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,23 +102,7 @@ MonoBehaviour:
   blockingLayers:
     serializedVersion: 2
     m_Bits: 1
---- !u!114 &6965997586600863883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3457358489072473376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d920fc0097fc2214da2fa1d4a1e4276e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GridVisualizer
-  displayCellMarkers: 1
-  displayGridLine: 1
-  emptyColour: {r: 0, g: 1, b: 0, a: 0.3}
-  blockedColour: {r: 1, g: 0, b: 0, a: 0.3}
---- !u!114 &73063981083988201
+--- !u!114 &5669893789228101346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,7 +126,7 @@ GameObject:
   - component: {fileID: 4932353343708313039}
   - component: {fileID: 4608025041030548719}
   - component: {fileID: 1980594164589423243}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,3 +204,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7086784886411118386
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7894879440257146835}
+  - component: {fileID: 6883400168059122831}
+  m_Layer: 6
+  m_Name: Visualizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7894879440257146835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7086784886411118386}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2225547396896514006}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6883400168059122831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7086784886411118386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d920fc0097fc2214da2fa1d4a1e4276e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridVisualizer
+  displayCellMarkers: 1
+  displayGridLine: 1
+  emptyColour: {r: 0, g: 1, b: 0, a: 0.3}
+  blockedColour: {r: 1, g: 0, b: 0, a: 0.3}
