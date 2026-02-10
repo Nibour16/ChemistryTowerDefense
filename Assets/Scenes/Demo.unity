@@ -1461,6 +1461,14 @@ PrefabInstance:
       propertyPath: blockingLayers.m_Bits
       value: 128
       objectReference: {fileID: 0}
+    - target: {fileID: 6883400168059122831, guid: 00c8be9d72087d24fbb64b82135a1ed7, type: 3}
+      propertyPath: displayGridLine
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6883400168059122831, guid: 00c8be9d72087d24fbb64b82135a1ed7, type: 3}
+      propertyPath: displayCellMarkers
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7060733829546035463, guid: 00c8be9d72087d24fbb64b82135a1ed7, type: 3}
       propertyPath: maxGridWidth
       value: 15

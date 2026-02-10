@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class GridDetector : BaseGridSecretary
 {
-    [SerializeField] private LayerMask blockingLayers;
-
     #region Detect if something is on the grid
     public bool IsCellBlocked(int x, int z)
     {
