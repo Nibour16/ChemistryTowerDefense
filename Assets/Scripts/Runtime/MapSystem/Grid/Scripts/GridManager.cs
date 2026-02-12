@@ -39,12 +39,12 @@ public class GridManager : Singleton<GridManager>
     private void SecretaryInitialization()
     {
         // Assign the secretary components that allows system members to apply
-        _gridGenerator = GetComponent<GridGenerator3D>();
-        _gridDetector = GetComponent<GridDetector>();
+        _gridGenerator = GetComponentInChildren<GridGenerator3D>();
+        _gridDetector = GetComponentInChildren<GridDetector>();
 
         if (blockerCollector == null)
         {
-            blockerCollector = GetComponent<GridBlockerCollector>();
+            blockerCollector = GetComponentInChildren<GridBlockerCollector>();
 
             if (blockerCollector == null)
             {
@@ -56,9 +56,9 @@ public class GridManager : Singleton<GridManager>
         }
 
         // Assign all grid secretary components about their manager
-        blockerCollector?.BindManager(this);
-        _gridGenerator?.BindManager(this);
-        _gridDetector?.BindManager(this);
+        blockerCollector.BindManager(this);
+        _gridGenerator.BindManager(this);
+        _gridDetector.BindManager(this);
     }
 
     private void GridInitialization()
@@ -152,7 +152,7 @@ public class GridManager : Singleton<GridManager>
         OnCellDataUpdated?.Invoke(row, column);
     }
 
-    #region Grid Translator Methods
+    #region Grid System public methods
     // Get world position of the center of the grid cell
     public Vector3 GetCellCenter(int x, int z)
     {
@@ -170,6 +170,17 @@ public class GridManager : Singleton<GridManager>
         x = Mathf.FloorToInt(localPos.x / _gridGenerator.CellSize);
         z = Mathf.FloorToInt(localPos.z / _gridGenerator.CellSize);
         return x >= 0 && x < _gridGenerator.GridWidth && z >= 0 && z < _gridGenerator.GridHeight;
+    }
+
+    public bool IsCellBlocked(int x, int z)
+    {
+        return _gridDetector != null && _gridDetector.IsCellBlocked(x, z);
+    }
+
+    public bool IsInsideGrid(int x, int z)
+    {
+        return x >= 0 && x < _gridData.GetLength(0) &&
+               z >= 0 && z < _gridData.GetLength(1);
     }
     #endregion
 }

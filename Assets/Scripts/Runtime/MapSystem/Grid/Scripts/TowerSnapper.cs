@@ -53,4 +53,33 @@ public class TowerSnapper : BaseGridSystem
             gridManager.ApplyStateToCell(x, z, true);
         }
     }
+
+    /* We might change snapper to be like this:
+    public void SnapTowerToCell(BaseTower tower, int x, int z)
+    {
+        if (tower == null)
+            return;
+
+        tower.transform.position = gridManager.GetCellCenter(x, z);
+    }
+
+    public void SnapAllTowers()
+    {
+        var grid = gridManager.GridData;
+        if (grid == null)
+            return;
+
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
+            {
+                var cell = grid[x, z];
+                if (cell?.tower != null)
+                    SnapTowerToCell(cell.tower, x, z);
+            }
+        }
+    }*/
 }

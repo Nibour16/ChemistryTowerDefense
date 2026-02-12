@@ -18,7 +18,7 @@ public class GridGenerator3D : BaseGridSecretary
 
     #region Grid Properties
     public float CellSize => _cellSize;
-    public Vector3 GridSize => _gridSize;
+    //public Vector3 GridSize => _gridSize;
     public Vector3 Origin => _origin;
     public int GridWidth => _gridWidth;
     public int GridHeight => _gridHeight;
