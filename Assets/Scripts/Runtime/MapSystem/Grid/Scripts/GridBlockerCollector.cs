@@ -24,6 +24,7 @@ public class GridBlockerCollector : BaseGridSecretary
         if (blockingRoot == null)
             return;
 
+        // Collider detection may not get what we want, like unplaceable grounds.
         var colliders = blockingRoot.GetComponentsInChildren<Collider>();
 
         foreach (var col in colliders)
