@@ -39,12 +39,12 @@ public class GridManager : Singleton<GridManager>
     private void SecretaryInitialization()
     {
         // Assign the secretary components that allows system members to apply
-        _gridGenerator = GetComponentInChildren<GridGenerator3D>();
-        _gridDetector = GetComponentInChildren<GridDetector>();
+        _gridGenerator = GetComponent<GridGenerator3D>();
+        _gridDetector = GetComponent<GridDetector>();
 
         if (blockerCollector == null)
         {
-            blockerCollector = GetComponentInChildren<GridBlockerCollector>();
+            blockerCollector = GetComponent<GridBlockerCollector>();
 
             if (blockerCollector == null)
             {
