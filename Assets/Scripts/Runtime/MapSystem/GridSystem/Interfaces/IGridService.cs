@@ -1,5 +1,5 @@
 using UnityEngine;
-public interface IGridService
+public interface IGridService : IMapService
 {
     Vector3 GetCellCenter(int x, int z);
     bool WorldToCell(Vector3 worldPos, out int x, out int z);
