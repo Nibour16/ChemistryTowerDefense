@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
+using static Unity.Collections.AllocatorManager;
 
 [RequireComponent(typeof(GridGenerator3D))]
 [RequireComponent(typeof(GridDetector))]
@@ -17,11 +20,11 @@ public class GridManager : Singleton<GridManager>
     //public GridDetector GridDetector => _gridDetector;
 
     // Grid system data collectors
-    private GridCellData[,] _gridData;
+    private GridStateDataBase _stateDataBase;
     private IReadOnlyList<Bounds> _blockingBounds;
 
     // Grid system data properties
-    public GridCellData[,] GridData => _gridData;
+    public GridStateDataBase StateDataBase => _stateDataBase;
     public IReadOnlyList<Bounds> BlockingBounds => _blockingBounds;
 
     // Subject during data update
@@ -79,7 +82,8 @@ public class GridManager : Singleton<GridManager>
     {
         int w = _gridGenerator.GridWidth;
         int h = _gridGenerator.GridHeight;
-        _gridData = new GridCellData[w, h];
+
+        _stateDataBase = new GridStateDataBase(w, h);
     }
 
     private void SetBlockingBounds(IReadOnlyList<Bounds> bounds)
@@ -95,12 +99,12 @@ public class GridManager : Singleton<GridManager>
         var blockedMap = _gridDetector.DetectAllCells();
 
         // No data or detection is not done, do nothing
-        if (_gridData == null || blockedMap == null)
+        if (_stateDataBase == null || blockedMap == null)
             return;
 
-        // Go over the cells to updatethe state
-        int w = _gridData.GetLength(0);
-        int h = _gridData.GetLength(1);
+        // Go over the cells to update the state
+        int w = _stateDataBase.Width;
+        int h = _stateDataBase.Height;
 
         for (int x = 0; x < w; x++)
         {
@@ -111,45 +115,50 @@ public class GridManager : Singleton<GridManager>
 
     public void ApplyStateToCell(int x, int z, bool blocked)
     {
-        GridCellData oldData = _gridData[x, z];
+        if (!IsInsideGrid(x, z))
+            return;
+
+        GridCellState oldState = _stateDataBase.GetState(x, z);
+
+        // Prevent map update that will mess up the tower occupation
+        /*if (ShouldPreventOverride(oldState, blocked))
+            return;*/
 
         GridCellState newState =
             blocked ? GridCellState.NotPlaceable : GridCellState.Empty;
 
         // If state is not changed, do nothing
-        if (oldData != null && oldData.state == newState)
+        if (oldState == newState)
             return;
 
-        BaseTower tower = oldData?.tower;
+        /*BaseTower tower = oldData?.tower;
 
         GridCellData newData = new GridCellData
         {
             tower = tower,   // Keep the old tower data
             state = newState    // As we are just updating the state
-        };
+        };*/
 
-        UpdateData(newData, x, z);  // Assign the new data to the desired place
+        UpdateData(newState, x, z);
+    }
+
+    private bool ShouldPreventOverride(GridCellState oldState, bool blocked)
+    {
+        // Best result will be just like: return (oldState == GridCellState.TowerOccupied)
+
+        bool isOccupied = oldState != GridCellState.Empty;
+        bool isTerrainCleared = !blocked;
+
+        return (isOccupied && isTerrainCleared);
     }
     #endregion
 
     // TODO: Could but recommended to be internal when all systems are stabilized
     // Data Update Core Handler
-    public void UpdateData(GridCellData newData, int row, int column)
+    public void UpdateData(GridCellState newState, int x, int z)
     {
-        if (_gridData == null)
-            return;
-
-        if (row < 0 || row >= _gridGenerator.GridWidth ||
-            column < 0 || column >= _gridGenerator.GridHeight)
-            return;
-
-        if (_gridData[row, column] == null)
-            _gridData[row, column] = new GridCellData();
-
-        _gridData[row, column].tower = newData.tower;
-        _gridData[row, column].state = newData.state;
-
-        OnCellDataUpdated?.Invoke(row, column);
+        _stateDataBase.SetState(x, z, newState);
+        OnCellDataUpdated?.Invoke(x, z);
     }
 
     #region Grid System public methods
@@ -179,8 +188,7 @@ public class GridManager : Singleton<GridManager>
 
     public bool IsInsideGrid(int x, int z)
     {
-        return x >= 0 && x < _gridData.GetLength(0) &&
-               z >= 0 && z < _gridData.GetLength(1);
+        return _stateDataBase.IsInside(x, z);
     }
     #endregion
 }

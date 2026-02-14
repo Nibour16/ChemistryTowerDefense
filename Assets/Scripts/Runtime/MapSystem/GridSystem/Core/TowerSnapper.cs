@@ -2,9 +2,28 @@ using UnityEngine;
 
 public class TowerSnapper : BaseGridSystem
 {
-    [SerializeField] private bool snappingDuringUpdate = false;
+    //[SerializeField] private bool snappingDuringUpdate = false;
 
-    private void Update()
+    public void SnapTower(BaseTower tower)
+    {
+        if (tower == null)
+            return;
+
+        Vector3 worldPos = tower.transform.position;
+
+        if (!gridManager.WorldToCell(worldPos, out int x, out int z))
+            return;
+
+        Vector3 snappedPos = gridManager.GetCellCenter(x, z);
+        tower.transform.position = snappedPos;
+
+        /*if (gridManager != null)
+        {
+            gridManager.ApplyStateToCell(x, z, true);
+        }*/
+    }
+
+    /*private void Update()
     {
         if (snappingDuringUpdate)
             SnapAllTowers();
@@ -33,24 +52,5 @@ public class TowerSnapper : BaseGridSystem
                 SnapTower(cell.tower);
             }
         }
-    }
-
-    public void SnapTower(BaseTower tower)
-    {
-        if (tower == null)
-            return;
-
-        Vector3 worldPos = tower.transform.position;
-
-        if (!gridManager.WorldToCell(worldPos, out int x, out int z))
-            return;
-
-        Vector3 snappedPos = gridManager.GetCellCenter(x, z);
-        tower.transform.position = snappedPos;
-
-        /*if (gridManager != null)
-        {
-            gridManager.ApplyStateToCell(x, z, true);
-        }*/
-    }
+    }*/
 }

@@ -48,8 +48,8 @@ public class GridDetector : BaseGridSecretary
     // Detect all cells in the grid
     public bool[,] DetectAllCells()
     {
-        int w = gridManager.GridData.GetLength(0);
-        int h = gridManager.GridData.GetLength(1);
+        int w = gridManager.StateDataBase.Width;
+        int h = gridManager.StateDataBase.Height;
 
         bool[,] blockedMap = new bool[w, h];
 
