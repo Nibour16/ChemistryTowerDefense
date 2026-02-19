@@ -9,9 +9,7 @@ public class GridDataInitializer
     public GridStateDataBase StateDataBase { get; private set; }
     public IReadOnlyList<Bounds> BlockingBounds { get; private set; }
 
-    public GridDataInitializer(
-        GridGenerator3D generator,
-        GridBlockerCollector blockerCollector)
+    public GridDataInitializer(GridGenerator3D generator, GridBlockerCollector blockerCollector)
     {
         _generator = generator;
         _blockerCollector = blockerCollector;
@@ -19,15 +17,14 @@ public class GridDataInitializer
 
     public void Initialize()
     {
-        StateDataBase = new GridStateDataBase(
-            _generator.GridWidth,
-            _generator.GridHeight
-        );
+        StateDataBase = new GridStateDataBase(_generator.GridWidth, _generator.GridHeight);
 
         if (_blockerCollector != null)
         {
             _blockerCollector.Collect();
             BlockingBounds = _blockerCollector.BlockingBounds;
         }
+        else
+            Debug.LogError("_blockerCollector is null!!");
     }
 }

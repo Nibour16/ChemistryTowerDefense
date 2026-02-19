@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class GridStateDataBase
 {
     private readonly GridCellData[,] _data;

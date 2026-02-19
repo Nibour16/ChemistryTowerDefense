@@ -1,7 +1,14 @@
+using System;
 using UnityEngine;
 
 public class GridDetector : BaseGridSecretary
 {
+    // Adjustable input for users, but read only
+    [SerializeField, Range(0, 50f)] private float blockingTolerancePercentage = 5f;
+    
+    // Private property for application
+    private float _detectShrink => 1f - blockingTolerancePercentage / 100f;
+
     #region Detect if something is on the grid
     public bool IsCellBlocked(int x, int z)
     {
@@ -23,7 +30,7 @@ public class GridDetector : BaseGridSecretary
             return false;
 
         // Calculate the cell bounds in the world
-        float cell = gridManager.GridGenerator.CellSize;
+        float cell = gridManager.GridGenerator.CellSize * _detectShrink;
         Vector3 center = gridManager.GetCellCenter(x, z);
 
         Bounds cellBounds = new Bounds(

@@ -30,6 +30,7 @@ public class GridManager : Singleton<GridManager>
     #region Properties
     public GridGenerator3D GridGenerator => _gridGenerator;
     public GridStateDataBase StateDataBase => _stateDataBase;
+    public GridBlockerCollector BlockerCollector  => blockerCollector;
     public IReadOnlyList<Bounds> BlockingBounds => _blockingBounds;
     #endregion
 
@@ -41,14 +42,15 @@ public class GridManager : Singleton<GridManager>
     protected override void Awake()
     {
         base.Awake();
-
-        InitializeModules();
+        
         InitializeSecretaries();
         InitializeGridData();
+        InitializeRuntimeModules();
     }
 
     private void InitializeSecretaries()
     {
+        _secretaryBinder = new GridSecretaryBinder(this);
         _secretaryBinder.Bind();
 
         _gridGenerator = _secretaryBinder.Generator;
@@ -58,36 +60,36 @@ public class GridManager : Singleton<GridManager>
 
     private void InitializeGridData()
     {
+        _dataInitializer = new GridDataInitializer(_gridGenerator, blockerCollector);
         _dataInitializer.Initialize();
 
         _stateDataBase = _dataInitializer.StateDataBase;
         _blockingBounds = _dataInitializer.BlockingBounds;
     }
 
-    private void InitializeModules()
+    private void InitializeRuntimeModules()
     {
-        // Initializer Modules
-        _secretaryBinder = new GridSecretaryBinder(this);
-        _dataInitializer = new GridDataInitializer(_gridGenerator, blockerCollector);
+        // System Coordination
+        _coordinate = new GridCoordinateSystem(_gridGenerator, _stateDataBase);
 
-        // new GridCoordinateSystem
-        // new GridOccupationHandler
-        // new GridStateSynchronizer
+        // State Synchronizer
+        _stateSync = new GridStateSynchronizer(_gridDetector, _stateDataBase, NotifyCellUpdated);
+        _stateSync.ApplyInitialState();
     }
     #endregion
 
     #region Public API
-    public Vector3 GetCellCenter(int x, int z) => Vector3.zero;
-        //=> _coordinate.GetCellCenter(x, z);
+    public Vector3 GetCellCenter(int x, int z)
+        => _coordinate.GetCellCenter(x, z);
 
-    public bool WorldToCell(Vector3 worldPos, out int x, out int z) { x = 0; z = 0; return false; }
-        //=> _coordinate.WorldToCell(worldPos, out x, out z);
+    public bool WorldToCell(Vector3 worldPos, out int x, out int z)
+        => _coordinate.WorldToCell(worldPos, out x, out z);
 
     public bool IsCellBlocked(int x, int z) => false;
         //=> _stateSync.IsCellBlocked(x, z);
 
-    public bool IsInsideGrid(int x, int z) => false;
-        //=> _coordinate.IsInsideGrid(x, z);
+    public bool IsInsideGrid(int x, int z)
+        => _coordinate.IsInsideGrid(x, z);
 
     public bool TryOccupy(int x, int z, BaseTower tower) => false;
         //=> _occupation.TryOccupy(x, z, tower);
