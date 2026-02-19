@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
-using static Unity.Collections.AllocatorManager;
 
 [RequireComponent(typeof(GridGenerator3D))]
 [RequireComponent(typeof(GridDetector))]
@@ -121,7 +118,7 @@ public class GridManager : Singleton<GridManager>
         GridCellState oldState = _stateDataBase.GetState(x, z);
 
         // Prevent map update that will mess up the tower occupation
-        /*if (ShouldPreventOverride(oldState, blocked))
+        /*if (ShouldPreventOverride(oldState))
             return;*/
 
         GridCellState newState =
@@ -131,26 +128,13 @@ public class GridManager : Singleton<GridManager>
         if (oldState == newState)
             return;
 
-        /*BaseTower tower = oldData?.tower;
-
-        GridCellData newData = new GridCellData
-        {
-            tower = tower,   // Keep the old tower data
-            state = newState    // As we are just updating the state
-        };*/
-
         UpdateData(newState, x, z);
     }
 
-    private bool ShouldPreventOverride(GridCellState oldState, bool blocked)
+    /*private bool ShouldPreventOverride(GridCellState oldState)
     {
-        // Best result will be just like: return (oldState == GridCellState.TowerOccupied)
-
-        bool isOccupied = oldState != GridCellState.Empty;
-        bool isTerrainCleared = !blocked;
-
-        return (isOccupied && isTerrainCleared);
-    }
+        return (oldState == GridCellState.TowerOccupied);
+    }*/
     #endregion
 
     // TODO: Could but recommended to be internal when all systems are stabilized
