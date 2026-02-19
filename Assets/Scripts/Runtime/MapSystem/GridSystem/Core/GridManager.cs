@@ -75,6 +75,9 @@ public class GridManager : Singleton<GridManager>
         // State Synchronizer
         _stateSync = new GridStateSynchronizer(_gridDetector, _stateDataBase, NotifyCellUpdated);
         _stateSync.ApplyInitialState();
+
+        // Grid Occupation Handler
+        _occupation = new GridOccupationHandler(_stateDataBase, NotifyCellUpdated);
     }
     #endregion
 
@@ -85,17 +88,17 @@ public class GridManager : Singleton<GridManager>
     public bool WorldToCell(Vector3 worldPos, out int x, out int z)
         => _coordinate.WorldToCell(worldPos, out x, out z);
 
-    public bool IsCellBlocked(int x, int z) => false;
-        //=> _stateSync.IsCellBlocked(x, z);
-
     public bool IsInsideGrid(int x, int z)
         => _coordinate.IsInsideGrid(x, z);
 
-    public bool TryOccupy(int x, int z, BaseTower tower) => false;
-        //=> _occupation.TryOccupy(x, z, tower);
+    public bool IsCellBlocked(int x, int z)
+        => _stateSync.IsCellBlocked(x, z);
 
-    public void ClearOccupation(int x, int z) { }
-        //=> _occupation.ClearOccupation(x, z);
+    public bool TryOccupy(int x, int z, BaseTower tower)
+        => _occupation.TryOccupy(x, z, tower);
+
+    public void ClearOccupation(int x, int z)
+        => _occupation.ClearOccupation(x, z);
     #endregion
 
     #region Internal Callback
