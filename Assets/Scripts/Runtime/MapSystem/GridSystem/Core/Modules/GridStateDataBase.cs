@@ -10,6 +10,11 @@ public class GridStateDataBase
         _data = new GridCellData[width, height];
     }
 
+    public GridCellData GetCell(int x, int z)
+    {
+        return _data[x, z];
+    }
+
     public GridCellState GetState(int x, int z)
     {
         return _data[x, z]?.state ?? GridCellState.Empty;

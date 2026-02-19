@@ -6,173 +6,100 @@ using UnityEngine;
 [RequireComponent(typeof(GridDetector))]
 public class GridManager : Singleton<GridManager>
 {
-    // Secretary class components of grid system
-    [SerializeField] private GridBlockerCollector blockerCollector; // Blocker collector reference
-    private GridGenerator3D _gridGenerator; // Grid generator reference
-    private GridDetector _gridDetector; // Grid detector reference
+    #region Secretary Components
+    [SerializeField] private GridBlockerCollector blockerCollector;
 
-    // Properties of secretary classes
-    public GridGenerator3D GridGenerator => _gridGenerator;
-    //public GridBlockerCollector BlockerCollector => blockerCollector;
-    //public GridDetector GridDetector => _gridDetector;
+    private GridGenerator3D _gridGenerator;
+    private GridDetector _gridDetector;
+    private GridFacade _gridFacade;
+    #endregion
 
-    // Grid system data collectors
+    #region Core Data
     private GridStateDataBase _stateDataBase;
     private IReadOnlyList<Bounds> _blockingBounds;
+    #endregion
 
-    // Grid system data properties
+    #region Modules
+    private GridSecretaryBinder _secretaryBinder;
+    private GridDataInitializer _dataInitializer;
+    private GridCoordinateSystem _coordinate;
+    private GridStateSynchronizer _stateSync;
+    private GridOccupationHandler _occupation;
+    #endregion
+
+    #region Properties
+    public GridGenerator3D GridGenerator => _gridGenerator;
     public GridStateDataBase StateDataBase => _stateDataBase;
     public IReadOnlyList<Bounds> BlockingBounds => _blockingBounds;
+    #endregion
 
-    // Subject during data update
+    #region Events
     public event Action<int, int> OnCellDataUpdated;
+    #endregion
 
     #region Initialization
     protected override void Awake()
     {
         base.Awake();
 
-        SecretaryInitialization();
-        GridInitialization();
+        InitializeModules();
+        InitializeSecretaries();
+        InitializeGridData();
     }
 
-    private void SecretaryInitialization()
+    private void InitializeSecretaries()
     {
-        // Assign the secretary components that allows system members to apply
-        _gridGenerator = GetComponent<GridGenerator3D>();
-        _gridDetector = GetComponent<GridDetector>();
+        _secretaryBinder.Bind();
 
-        if (blockerCollector == null)
-        {
-            blockerCollector = GetComponent<GridBlockerCollector>();
-
-            if (blockerCollector == null)
-            {
-                Debug.LogWarning(
-                    "GridManager: No GridBlockerCollector found. Grid will assume no blocking objects.",
-                    this
-                );
-            }
-        }
-
-        // Assign all grid secretary components about their manager
-        blockerCollector.BindManager(this);
-        _gridGenerator.BindManager(this);
-        _gridDetector.BindManager(this);
+        _gridGenerator = _secretaryBinder.Generator;
+        _gridDetector = _secretaryBinder.Detector;
+        blockerCollector = _secretaryBinder.BlockerCollector;
     }
 
-    private void GridInitialization()
+    private void InitializeGridData()
     {
-        // Initialize tower grid
-        InitializeTowerGrid();
+        _dataInitializer.Initialize();
 
-        if (blockerCollector != null)
-        {
-            blockerCollector.Collect();
-            SetBlockingBounds(blockerCollector.BlockingBounds);
-        }
-
-        ApplyStatesToGrid();
+        _stateDataBase = _dataInitializer.StateDataBase;
+        _blockingBounds = _dataInitializer.BlockingBounds;
     }
 
-    private void InitializeTowerGrid()
+    private void InitializeModules()
     {
-        int w = _gridGenerator.GridWidth;
-        int h = _gridGenerator.GridHeight;
+        // Initializer Modules
+        _secretaryBinder = new GridSecretaryBinder(this);
+        _dataInitializer = new GridDataInitializer(_gridGenerator, blockerCollector);
 
-        _stateDataBase = new GridStateDataBase(w, h);
-    }
-
-    private void SetBlockingBounds(IReadOnlyList<Bounds> bounds)
-    {
-        _blockingBounds = bounds;
+        // new GridCoordinateSystem
+        // new GridOccupationHandler
+        // new GridStateSynchronizer
     }
     #endregion
 
-    #region State Update
-    private void ApplyStatesToGrid()
-    {
-        // Summary the detection of the detector
-        var blockedMap = _gridDetector.DetectAllCells();
+    #region Public API
+    public Vector3 GetCellCenter(int x, int z) => Vector3.zero;
+        //=> _coordinate.GetCellCenter(x, z);
 
-        // No data or detection is not done, do nothing
-        if (_stateDataBase == null || blockedMap == null)
-            return;
+    public bool WorldToCell(Vector3 worldPos, out int x, out int z) { x = 0; z = 0; return false; }
+        //=> _coordinate.WorldToCell(worldPos, out x, out z);
 
-        // Go over the cells to update the state
-        int w = _stateDataBase.Width;
-        int h = _stateDataBase.Height;
+    public bool IsCellBlocked(int x, int z) => false;
+        //=> _stateSync.IsCellBlocked(x, z);
 
-        for (int x = 0; x < w; x++)
-        {
-            for (int z = 0; z < h; z++)
-                ApplyStateToCell(x, z, blockedMap[x, z]);
-        }
-    }
+    public bool IsInsideGrid(int x, int z) => false;
+        //=> _coordinate.IsInsideGrid(x, z);
 
-    public void ApplyStateToCell(int x, int z, bool blocked)
-    {
-        if (!IsInsideGrid(x, z))
-            return;
+    public bool TryOccupy(int x, int z, BaseTower tower) => false;
+        //=> _occupation.TryOccupy(x, z, tower);
 
-        GridCellState oldState = _stateDataBase.GetState(x, z);
-
-        // Prevent map update that will mess up the tower occupation
-        /*if (ShouldPreventOverride(oldState))
-            return;*/
-
-        GridCellState newState =
-            blocked ? GridCellState.NotPlaceable : GridCellState.Empty;
-
-        // If state is not changed, do nothing
-        if (oldState == newState)
-            return;
-
-        UpdateData(newState, x, z);
-    }
-
-    /*private bool ShouldPreventOverride(GridCellState oldState)
-    {
-        return (oldState == GridCellState.TowerOccupied);
-    }*/
+    public void ClearOccupation(int x, int z) { }
+        //=> _occupation.ClearOccupation(x, z);
     #endregion
 
-    // TODO: Could but recommended to be internal when all systems are stabilized
-    // Data Update Core Handler
-    public void UpdateData(GridCellState newState, int x, int z)
+    #region Internal Callback
+    private void NotifyCellUpdated(int x, int z)
     {
-        _stateDataBase.SetState(x, z, newState);
         OnCellDataUpdated?.Invoke(x, z);
-    }
-
-    #region Grid System public methods
-    // Get world position of the center of the grid cell
-    public Vector3 GetCellCenter(int x, int z)
-    {
-        return new Vector3(
-            _gridGenerator.Origin.x + x * _gridGenerator.CellSize,
-            _gridGenerator.FixedY,
-            _gridGenerator.Origin.z + z * _gridGenerator.CellSize
-        );
-    }
-
-    // Convert world position to grid cell position
-    public bool WorldToCell(Vector3 worldPos, out int x, out int z)
-    {
-        Vector3 localPos = worldPos - _gridGenerator.Origin;
-        x = Mathf.FloorToInt(localPos.x / _gridGenerator.CellSize);
-        z = Mathf.FloorToInt(localPos.z / _gridGenerator.CellSize);
-        return x >= 0 && x < _gridGenerator.GridWidth && z >= 0 && z < _gridGenerator.GridHeight;
-    }
-
-    public bool IsCellBlocked(int x, int z)
-    {
-        return _gridDetector != null && _gridDetector.IsCellBlocked(x, z);
-    }
-
-    public bool IsInsideGrid(int x, int z)
-    {
-        return _stateDataBase.IsInside(x, z);
     }
     #endregion
 }

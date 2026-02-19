@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2225547396896514006}
   - component: {fileID: 1548894941163784057}
+  - component: {fileID: 4245136707504923357}
   - component: {fileID: 9197085865992280805}
   - component: {fileID: 7060733829546035463}
   - component: {fileID: 4952832649926340175}
@@ -59,6 +60,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4245136707504923357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3457358489072473376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97d9eb44160c57479e45f3f344814cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridFacade
 --- !u!114 &9197085865992280805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,9 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffe4a3531e916441ab9a2b989261e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridDetector
-  blockingLayers:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!114 &5669893789228101346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,7 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c44051dccd6d87949a24f197d9fdc305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerSnapper
-  snappingDuringUpdate: 0
 --- !u!1 &4014614384815412504
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,6 +223,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7894879440257146835}
   - component: {fileID: 6883400168059122831}
+  - component: {fileID: 7151775382735010322}
+  - component: {fileID: 660525045696177787}
   m_Layer: 6
   m_Name: Visualizer
   m_TagString: Untagged
@@ -248,7 +259,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d920fc0097fc2214da2fa1d4a1e4276e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridVisualizer
-  displayCellMarkers: 1
-  displayGridLine: 1
+--- !u!114 &7151775382735010322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7086784886411118386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd7f4879cf76f340a4f49004e50ec3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridLineDrawer
+  gridLineColor: {r: 0, g: 0, b: 0, a: 1}
+  gridLineWidth: 0.03
+  lineXNamePrefix: Line_X_
+  lineZNamePrefix: Line_Z_
+--- !u!114 &660525045696177787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7086784886411118386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f4dbce75df6a04e9309ad4d2267e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridCellDrawer
   emptyColour: {r: 0, g: 1, b: 0, a: 0.3}
   blockedColour: {r: 1, g: 0, b: 0, a: 0.3}
+  cellNamePrefix: Cell
