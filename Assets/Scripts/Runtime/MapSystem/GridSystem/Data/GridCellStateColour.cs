@@ -4,5 +4,5 @@ using UnityEngine;
 public class GridCellStateColour
 {
     public GridCellState state;
-    public Color color;
+    public Color colour;
 }
