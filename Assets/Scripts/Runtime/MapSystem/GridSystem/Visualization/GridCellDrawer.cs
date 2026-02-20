@@ -4,13 +4,31 @@ using UnityEngine;
 public class GridCellDrawer : MonoBehaviour
 {
     [Header("Cell Colours")]
-    [SerializeField] private Color emptyColour = new Color(0, 1, 0, 0.3f);
-    [SerializeField] private Color blockedColour = new Color(1, 0, 0, 0.3f);
+    [SerializeField] private List<GridCellStateColour> stateColors = new();
 
     [Header("Advanced Setting")]
     [SerializeField] private string cellNamePrefix = "Cell";
 
     private Dictionary<(int x, int z), GameObject> _cellMarkers = new();
+    private Dictionary<GridCellState, Color> _colorMap;
+    private Material _sharedMaterial;
+
+    private void Awake()
+    {
+        Initialization();
+    }
+
+    private void Initialization()
+    {
+        _sharedMaterial = new Material(Shader.Find("Unlit/Color"));
+        _colorMap = new Dictionary<GridCellState, Color>();
+
+        foreach (var entry in stateColors)
+        {
+            if (!_colorMap.ContainsKey(entry.state))
+                _colorMap.Add(entry.state, entry.color);
+        }
+    }
 
     public void Clear()
     {
@@ -39,13 +57,10 @@ public class GridCellDrawer : MonoBehaviour
     }
 
     public void UpdateSingle(
-        Transform root,
-        int x,
-        int z,
+        Transform root, int x, int z,
         System.Func<int, int, GridCellState> stateGetter,
         System.Func<int, int, Vector3> centerGetter,
-        float y,
-        float cell)
+        float y, float cell)
     {
         SetCellMarker(root, x, z, stateGetter, centerGetter, y, cell);
     }
@@ -75,7 +90,10 @@ public class GridCellDrawer : MonoBehaviour
 
     private Color GetMarkerColour(GridCellState state)
     {
-        return state == GridCellState.NotPlaceable ? blockedColour : emptyColour;
+        if (_colorMap.TryGetValue(state, out var c))
+            return c;
+
+        return Color.magenta; // If not setting up will give a magenta colour (usually magenta in Unity)
     }
 
     private GameObject CreateCellMarker(Transform root, int x, int z, Vector3 worldPos)
@@ -110,7 +128,7 @@ public class GridCellDrawer : MonoBehaviour
     private void SetMarkerColor(GameObject marker, Color c)
     {
         var r = marker.GetComponent<Renderer>();
-        r.material = new Material(Shader.Find("Unlit/Color"));
+        r.material = _sharedMaterial;
         r.material.color = c;
     }
 }

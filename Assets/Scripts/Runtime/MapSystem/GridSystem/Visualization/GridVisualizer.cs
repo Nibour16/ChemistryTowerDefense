@@ -4,14 +4,13 @@ using UnityEngine;
 [RequireComponent(typeof(GridCellDrawer))]
 public class GridVisualizer : BaseGridSystem
 {
-    //[Header("General Setting")]
+    private Transform _root;
 
-    [Header("Drawer References")]
+    // Drawer References
     private GridLineDrawer _lineDrawer;
     private GridCellDrawer _cellDrawer;
 
-    private Transform _root;
-
+    // Cached Values
     private float _cachedCellSize;
     private float _cachedY;
     private int _cachedWidth;

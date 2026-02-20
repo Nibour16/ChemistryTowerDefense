@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffe4a3531e916441ab9a2b989261e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridDetector
+  blockingTolerancePercentage: 5
 --- !u!114 &5669893789228101346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,6 +288,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79f4dbce75df6a04e9309ad4d2267e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridCellDrawer
-  emptyColour: {r: 0, g: 1, b: 0, a: 0.3}
-  blockedColour: {r: 1, g: 0, b: 0, a: 0.3}
+  stateColors:
+  - state: 0
+    color: {r: 0, g: 1, b: 0, a: 1}
+  - state: 1
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - state: 2
+    color: {r: 0.1176471, g: 0.5647059, b: 1, a: 1}
   cellNamePrefix: Cell
