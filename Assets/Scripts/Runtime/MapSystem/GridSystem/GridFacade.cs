@@ -20,7 +20,7 @@ public class GridFacade : BaseGridSecretary, IGridService
 
     #region State
     public GridCellState GetState(int x, int z)
-    => gridManager.StateDataBase.GetState(x, z);
+        => gridManager.StateDataBase.GetState(x, z);
 
     public bool IsPlaceable(int x, int z)
         => gridManager.StateDataBase.IsAvailable(x, z);

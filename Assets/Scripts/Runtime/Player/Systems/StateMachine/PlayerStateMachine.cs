@@ -3,30 +3,33 @@ using UnityEngine;
 public class PlayerStateMachine : BaseStateMachine
 {
     #region Keep track of all states
-    // TODO: Create the desired states here, ensure they are all non-serialized and private
+    private PlayerNormalState _normalState;
+    private PlayerBuildState _buildState;
     #endregion
 
     #region Referencing all of states
-    // TODO: Create the desired state properties here
+    public PlayerNormalState NormalState => _normalState;
+    public PlayerBuildState BuildState => _buildState;
     #endregion
 
     #region Keep track of all supporting components
-    //  TODO: Create supporting components here, ensure they are all private
+    private PlayerManager _manager;
     #endregion
 
     #region Referencing all supporting components
-    //  TODO: Create supporting components here
+    public PlayerManager Manager => _manager;
     #endregion
 
     private void Awake()
     {
-        // TODO: Initialize states and components here
-        // Example: _someState = new SomeState(this);
+        _normalState = new PlayerNormalState(this);
+        _buildState = new PlayerBuildState(this);
+
+        _manager = PlayerManager.Instance;
     }
 
     private void Start()
     {
-        // TODO: Set initial state
-        // Format will be like this: SetState(new SomeState(this));
+        SetState(_normalState);
     }
 }

@@ -1245,7 +1245,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3578124167817371090, guid: ceab5363ddc36fe4c864815f16f0b221, type: 3}
       propertyPath: m_Name
-      value: PlayerManager
+      value: PlayerSystem
       objectReference: {fileID: 0}
     - target: {fileID: 7208988050278715745, guid: ceab5363ddc36fe4c864815f16f0b221, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1388,6 +1388,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 9082097384236431238, guid: 95ac514dbf9cf3b419b4210097cfaa9e, type: 3}
+      propertyPath: towerObject
+      value: 
+      objectReference: {fileID: 8666652693814656269, guid: 3fbbdf428ee204d4eaf7d22f98101017, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 
 public class PlayerBuildState : BaseState
 {
     private PlayerStateMachine _stateMachine;
+    public event Action OnBuildExited;
 
     #region Initialization
     public PlayerBuildState(BaseStateMachine  stateMachine) : base(stateMachine) 
@@ -23,7 +25,7 @@ public class PlayerBuildState : BaseState
     #region State Lifecycle
     public override void EnterState() 
     {
-        // TODO: write logic when entering this state here
+        Debug.Log("Enter Build State!");
     }
     public override void UpdateState() 
     {
@@ -31,7 +33,7 @@ public class PlayerBuildState : BaseState
     }
     public override void ExitState() 
     {
-        // TODO: write logic when exiting this state here
+        OnBuildExited?.Invoke();
     }
     #endregion
 }
