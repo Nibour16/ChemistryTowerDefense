@@ -42,13 +42,11 @@ public class BuildManager : Singleton<BuildManager>
     #region Public API
     public void OnTowerSelected(GameObject prefab)
     {
-        if (_currentDefinition != null)
+        if (ShouldCancelBuildSelection(prefab))
         {
             ClearDefinition();
             return;
         }
-        
-        if (prefab == null) return; // If prefab is empty, do nothing
 
         var definition = new BuildDefinition(prefab);   // Create new definition
 
@@ -61,8 +59,18 @@ public class BuildManager : Singleton<BuildManager>
         _stateMachine.SetState(_stateMachine.BuildState);
     }
 
+    private bool ShouldCancelBuildSelection(GameObject prefab)
+    {
+        var isSameTower = _currentDefinition != null && _currentDefinition.TowerPrefab == prefab;
+        var isInvalidTower = prefab == null;
+
+        return isSameTower || isInvalidTower;
+    }
+
     public void ClearDefinition()
     {
+        if (_currentDefinition == null) return;
+
         _currentDefinition = null;
         _stateMachine.SetState(_stateMachine.NormalState);
     }

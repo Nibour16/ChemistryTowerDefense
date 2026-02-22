@@ -20,6 +20,13 @@ public class BuildStateMachine : BaseStateMachine
 
     #endregion
 
+    public override void SetState(BaseState newState)
+    {
+        if (currentState == newState) return;
+
+        base.SetState(newState);
+    }
+
     private void Awake()
     {
         _normalState = new NormalState(this);
