@@ -83,3 +83,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41bdabe9d9901a14fbdc1195e8a70812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildPreviewHandler
+  buildAnchorName: BuildAnchor

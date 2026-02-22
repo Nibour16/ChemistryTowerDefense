@@ -1220,6 +1220,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildSystem
       objectReference: {fileID: 0}
+    - target: {fileID: 6526826316579530269, guid: 9c393b38f71b66548885ed37d2e7d509, type: 3}
+      propertyPath: buildAnchorName
+      value: BuildAnchor
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

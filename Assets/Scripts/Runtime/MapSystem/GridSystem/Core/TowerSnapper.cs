@@ -2,55 +2,18 @@ using UnityEngine;
 
 public class TowerSnapper : BaseGridSystem
 {
-    //[SerializeField] private bool snappingDuringUpdate = false;
-
-    public void SnapTower(BaseTower tower)
+    public bool TryGetSnappedPosition(
+        Vector3 worldPos, out Vector3 snappedPos, out int cellX, out int cellZ)
     {
-        if (tower == null)
-            return;
-
-        Vector3 worldPos = tower.transform.position;
-
-        if (!gridManager.WorldToCell(worldPos, out int x, out int z))
-            return;
-
-        Vector3 snappedPos = gridManager.GetCellCenter(x, z);
-        tower.transform.position = snappedPos;
-
-        /*if (gridManager != null)
+        if (!gridManager.WorldToCell(worldPos, out cellX, out cellZ))
         {
-            gridManager.ApplyStateToCell(x, z, true);
-        }*/
-    }
-
-    /*private void Update()
-    {
-        if (snappingDuringUpdate)
-            SnapAllTowers();
-    }
-
-    private void SnapAllTowers()
-    {
-        GridCellData[,] grid = gridManager.GridData;
-
-        // Data is empty, no need to snap
-        if (grid == null)
-            return;
-
-        // Get width and height
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int z = 0; z < height; z++)
-            {
-                GridCellData cell = grid[x, z];
-                if (cell == null || cell.tower == null)
-                    continue;
-
-                SnapTower(cell.tower);
-            }
+            snappedPos = default;
+            return false;
         }
-    }*/
+        else
+        {
+            snappedPos = gridManager.GetCellCenter(cellX, cellZ);
+            return true;
+        }
+    }
 }

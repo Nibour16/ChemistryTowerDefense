@@ -21,6 +21,7 @@ public class BuildDefinition
         if (_towerPrefab == null)
         {
             Debug.LogError("TowerPrefab is not found.");
+            return;
         }
     }
 

@@ -1,8 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BuildPreviewHandler : BaseBuildSecretary
 {
+    [SerializeField] private string buildAnchorName = "BuildAnchor";
+
     private GameObject _ghost;
+    private Transform _anchor;
+    private Vector3 _anchorOffset;
 
     public void CreateGhost()
     {
@@ -12,6 +16,15 @@ public class BuildPreviewHandler : BaseBuildSecretary
         var prefab = manager.CurrentDefinition.TowerPrefab;
 
         _ghost = Instantiate(prefab);
+        _anchor = _ghost.transform.Find(buildAnchorName);
+
+        if (_anchor != null)
+            _anchorOffset = _ghost.transform.position - _anchor.position;
+        else
+        {
+            Debug.LogWarning("Anchor is not found");
+            _anchorOffset = default;
+        }
 
         MakeGhostVisual(prefab);
     }
@@ -30,11 +43,11 @@ public class BuildPreviewHandler : BaseBuildSecretary
             col.enabled = false;
         }
 
-        // Change the material colour
+        /*// Change the material colour
         foreach (var renderer in ghost.GetComponentsInChildren<Renderer>())
         {
-            renderer.material.color = new Color(0, 1, 0, 0.5f);
-        }
+            renderer.sharedMaterial.color = new Color(0, 1, 0, 0.5f);
+        }*/
     }
 
     public void DestroyGhost()
@@ -48,6 +61,6 @@ public class BuildPreviewHandler : BaseBuildSecretary
         if (_ghost == null)
             return;
 
-        _ghost.transform.position = worldPos;
+        _ghost.transform.position = worldPos + _anchorOffset;
     }
 }

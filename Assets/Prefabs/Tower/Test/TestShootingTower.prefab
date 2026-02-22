@@ -139,7 +139,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5000001
   m_Height: 2
@@ -158,6 +158,10 @@ PrefabInstance:
       value: TestShootingTower
       objectReference: {fileID: 0}
     - target: {fileID: 2532025263253427435, guid: e4469b3d44a8908428aa41ea5172ece7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532025263253427435, guid: e4469b3d44a8908428aa41ea5172ece7, type: 3}
       propertyPath: attackRange
       value: 15
       objectReference: {fileID: 0}
@@ -165,6 +169,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b3da7fd706ee5804e8fa39e6c67131e8, type: 2}
+    - target: {fileID: 7576907081913096320, guid: e4469b3d44a8908428aa41ea5172ece7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7715730919611586124, guid: e4469b3d44a8908428aa41ea5172ece7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -233,7 +241,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8666652693814656269}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d53522ad0518fda4aa5b309a32c154ef, type: 3}
   m_Name: 

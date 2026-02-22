@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class BuildManager : Singleton<BuildManager>
-{
+{   
     #region Support Components and Modules
 
     private BuildStateMachine _stateMachine;
@@ -70,6 +70,8 @@ public class BuildManager : Singleton<BuildManager>
 
     public void ClearDefinition()
     {
+        _previewHandler.DestroyGhost();
+
         if (_currentDefinition == null) return;
 
         _currentDefinition = null;
