@@ -63,8 +63,8 @@ public class BuildManager : Singleton<BuildManager>
 
     public void ClearDefinition()
     {
-        _stateMachine.SetState(_stateMachine.NormalState);
         _currentDefinition = null;
+        _stateMachine.SetState(_stateMachine.NormalState);
     }
 
     public void OnBuildFinished()

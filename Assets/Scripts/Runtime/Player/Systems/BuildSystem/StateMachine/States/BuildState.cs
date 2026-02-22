@@ -24,7 +24,7 @@ public class BuildState : BaseState
     #region State Lifecycle
     public override void EnterState() 
     {
-        
+        Debug.Log("Enter Build State");
     }
     public override void UpdateState() 
     {
