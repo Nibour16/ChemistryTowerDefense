@@ -7,7 +7,6 @@ public class GridSecretaryBinder
     public GridGenerator3D Generator { get; private set; }
     public GridDetector Detector { get; private set; }
     public GridBlockerCollector BlockerCollector { get; private set; }
-    public GridFacade GridFacade { get; private set; }
 
     public GridSecretaryBinder(GridManager manager)
     {
@@ -19,7 +18,6 @@ public class GridSecretaryBinder
         Generator = _manager.GetComponent<GridGenerator3D>();
         Detector = _manager.GetComponent<GridDetector>();
         BlockerCollector = _manager.BlockerCollector;
-        GridFacade = _manager.GetComponent<GridFacade>();
 
         if (Generator != null)
             Generator.BindManager(_manager);
@@ -35,10 +33,5 @@ public class GridSecretaryBinder
             BlockerCollector.BindManager(_manager);
         else
             Debug.LogError("Blocker Collector is not assigned!");
-
-        if (GridFacade != null)
-            GridFacade.BindManager(_manager);
-        else
-            Debug.LogError("Grid Facade does not exist in the object!");
     }
 }

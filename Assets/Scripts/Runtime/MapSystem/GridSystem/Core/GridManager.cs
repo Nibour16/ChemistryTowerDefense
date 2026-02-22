@@ -11,7 +11,6 @@ public class GridManager : Singleton<GridManager>
 
     private GridGenerator3D _gridGenerator;
     private GridDetector _gridDetector;
-    private GridFacade _gridFacade;
     #endregion
 
     #region Core Data

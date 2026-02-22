@@ -3,12 +3,12 @@ using UnityEngine;
 public class TestSelectorButton : BaseUIButton
 {
     [SerializeField] private GameObject towerObject;
-    private PlayerManager _playerManager;
+    private IBuildService _buildService;
 
     protected override void Awake()
     {
         base.Awake();
-        _playerManager = PlayerManager.Instance;
+        _buildService = ServiceCollector.Build;
     }
 
     public override void OnHovered() { }
@@ -17,6 +17,6 @@ public class TestSelectorButton : BaseUIButton
 
     public override void OnSelected()
     {
-        _playerManager.BuildManager.OnTowerSelected(towerObject);
+        _buildService.OnTowerSelected(towerObject);
     }
 }

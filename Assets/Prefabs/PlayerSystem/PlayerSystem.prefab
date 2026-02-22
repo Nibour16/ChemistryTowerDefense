@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: -3318883620741453602}
   - component: {fileID: 2835016516320889268}
   - component: {fileID: 8960977635342594653}
-  - component: {fileID: 2232388225403029458}
   m_Layer: 2
   m_Name: PlayerSystem
   m_TagString: Untagged
@@ -47,7 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8547776f5cf48b743b7f592b59372a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
-  _stateMachine: {fileID: 2232388225403029458}
 --- !u!114 &2835016516320889268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,15 +70,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ec9e35cf9003741a733c72cfe19bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionManager
---- !u!114 &2232388225403029458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3578124167817371090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 336730a04cf8ba64da7d838c5afcb862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerStateMachine

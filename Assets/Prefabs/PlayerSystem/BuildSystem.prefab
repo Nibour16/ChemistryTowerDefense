@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4010304505148345055}
+  - component: {fileID: 2147573327191136812}
+  - component: {fileID: 8924571179330218687}
+  - component: {fileID: 6526826316579530269}
   m_Layer: 0
   m_Name: BuildSystem
   m_TagString: Untagged
@@ -31,3 +34,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2147573327191136812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520246870201328632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc279712d9fa644c86023425c3b4f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildManager
+  _stateMachine: {fileID: 8924571179330218687}
+--- !u!114 &8924571179330218687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520246870201328632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 336730a04cf8ba64da7d838c5afcb862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildStateMachine
+--- !u!114 &6526826316579530269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520246870201328632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bdabe9d9901a14fbdc1195e8a70812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildPreviewHandler

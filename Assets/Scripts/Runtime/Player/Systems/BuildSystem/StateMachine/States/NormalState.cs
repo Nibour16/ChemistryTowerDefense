@@ -1,21 +1,21 @@
 using UnityEngine;
 
-public class PlayerNormalState : BaseState
+public class NormalState : BaseState
 {
-    private PlayerStateMachine _stateMachine;
+    private BuildStateMachine _stateMachine;
 
     #region Initialization
-    public PlayerNormalState(BaseStateMachine  stateMachine) : base(stateMachine) 
+    public NormalState(BaseStateMachine  stateMachine) : base(stateMachine) 
     {
         ResolveDependencies();
     }
 
     private void ResolveDependencies()
     {
-        _stateMachine = GetStateMachine<PlayerStateMachine>();
+        _stateMachine = GetStateMachine<BuildStateMachine>();
         if (_stateMachine == null)
         {
-            Debug.LogError($"{nameof(PlayerNormalState)} requires {nameof(PlayerStateMachine)}");
+            Debug.LogError($"{nameof(BuildStateMachine)} requires {nameof(BuildStateMachine)}");
         }
     }
     #endregion
@@ -27,7 +27,7 @@ public class PlayerNormalState : BaseState
     }
     public override void UpdateState() 
     {
-        // TODO: write logic during this state update here
+        // TODO: write logic during this state update here;
     }
     public override void ExitState() 
     {

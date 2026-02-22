@@ -2,20 +2,21 @@ using UnityEngine;
 
 public abstract class BaseStateMachine : MonoBehaviour
 {
-    protected BaseState CurrentState;
+    protected BaseState currentState;
+    public BaseState CurrentState => currentState;
 
     public virtual void SetState(BaseState newState)
     {
         // exit the current state if it is available
-        CurrentState?.ExitState();
+        currentState?.ExitState();
         // Set the new state
-        CurrentState = newState;
+        currentState = newState;
         // Enter the new state
-        CurrentState.EnterState();
+        currentState.EnterState();
     }
 
     public virtual void Update()
     {
-        CurrentState?.UpdateState();
+        currentState?.UpdateState();
     }
 }
