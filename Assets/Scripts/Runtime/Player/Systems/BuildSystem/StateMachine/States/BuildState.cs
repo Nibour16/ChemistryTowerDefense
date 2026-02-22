@@ -41,8 +41,7 @@ public class BuildState : BaseState
 
     public override void ExitState() 
     {
-        _inputManager = null;
-        _worldPointer = null;
+        
     }
     #endregion
 }
