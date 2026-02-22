@@ -23,12 +23,14 @@ public class NormalState : BaseState
     #region State Lifecycle
     public override void EnterState() 
     {
-        Debug.Log("Enter Normal State");
+        
     }
+
     public override void UpdateState() 
     {
         // TODO: write logic during this state update here;
     }
+
     public override void ExitState() 
     {
         // TODO: write logic when exiting this state here

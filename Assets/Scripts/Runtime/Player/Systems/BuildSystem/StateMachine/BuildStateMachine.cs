@@ -13,11 +13,11 @@ public class BuildStateMachine : BaseStateMachine
     #endregion
 
     #region Keep track of all supporting components
-
+    private BuildManager _buildManager;
     #endregion
 
     #region Referencing all supporting components
-
+    public BuildManager BuildManager => _buildManager;
     #endregion
 
     public override void SetState(BaseState newState)
@@ -31,6 +31,8 @@ public class BuildStateMachine : BaseStateMachine
     {
         _normalState = new NormalState(this);
         _buildState = new BuildState(this);
+
+        _buildManager = BuildManager.Instance;
     }
 
     private void Start()

@@ -3,6 +3,7 @@ using UnityEngine;
 public class BuildManager : Singleton<BuildManager>
 {
     #region Support Components and Modules
+
     private BuildStateMachine _stateMachine;
     private IGridService _gridService;
 

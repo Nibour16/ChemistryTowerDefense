@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class InteractionManager : Singleton<InteractionManager>
 {
-    private Camera _camera; // Create game camera reference
     private InputManager _inputManager; // Create input manager reference
     private IInteractable _currentHover; // Create currenr hover interface object reference
+    private IWorldPointerService _worldPointer;
 
     private bool _currentHoverHandledThisFrame = false;
 
@@ -13,7 +13,7 @@ public class InteractionManager : Singleton<InteractionManager>
     {
         base.Awake();
 
-        _camera = Camera.main;  // By default, we use the main camera
+        _worldPointer = ServiceLocator.GetRequired<IWorldPointerService>();
         _inputManager = InputManager.Instance;  // Assign input manager reference by getting instance
         
         // Tell people to prevent if they forget to put input manager inside the scene
@@ -29,10 +29,9 @@ public class InteractionManager : Singleton<InteractionManager>
 
     private void HandleHover()
     {
-        // Construct ray by setting the origin by point position
-        Ray ray = _camera.ScreenPointToRay(_inputManager.PointPosition());
+        Vector2 screenPos = _inputManager.PointPosition(); // Get mouse position on the screen
 
-        if (Physics.Raycast(ray, out RaycastHit hit))   //If hit something by the ray
+        if (_worldPointer.TryRaycast(screenPos, out RaycastHit hit))   // If hit something by the ray
         {
             var interactable = hit.collider.GetComponent<IInteractable>();
 
@@ -54,7 +53,7 @@ public class InteractionManager : Singleton<InteractionManager>
     {
         // When the select input is pressed, execute select event
         // Only execute if current hover object is assigned, otherwise nothing will happen
-        if (!InputManager.Instance.IsSelected())
+        if (!_inputManager.IsSelected())
             return;
         
         SelectCurrentHover();
