@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WorldPointerResolver : MonoBehaviour
 {
+    [SerializeField] private float groundPlaneHeight = 0f;
     [SerializeField] private LayerMask raycastMask;
     [SerializeField, Min(10f)] private float raycastDistance = 100f;
 
@@ -24,9 +25,29 @@ public class WorldPointerResolver : MonoBehaviour
         return false;
     }
 
+    public bool TryGetProjectedPosition(Vector2 screenPos, out Vector3 worldPos)
+    {
+        Ray ray = GetPointRay(screenPos);
+
+        Vector3 groundPlanePosition = new (0f, groundPlaneHeight, 0f);
+        Plane groundPlane = new(Vector3.up, groundPlanePosition);
+
+        if (groundPlane.Raycast(ray, out float enter))
+        {
+            worldPos = ray.GetPoint(enter);
+            return true;
+        }
+
+        worldPos = default;
+        return false;
+    }
+
     public bool TryRaycast(Vector2 screenPos, out RaycastHit hit)
     {
-        Ray ray = _camera.ScreenPointToRay(screenPos);
+        Ray ray = GetPointRay(screenPos);
         return Physics.Raycast(ray, out hit, raycastDistance, raycastMask);
     }
+
+    private Ray GetPointRay(Vector2 screenPos)
+        => _camera.ScreenPointToRay(screenPos);
 }

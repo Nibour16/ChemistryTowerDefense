@@ -33,15 +33,22 @@ public class BuildState : BaseState
 
     public override void UpdateState() 
     {
-        var screenPos = _inputManager.PointPosition();
-
-        if (_worldPointer.TryGetWorldPosition(screenPos, out Vector3 previewPosition))
-            _stateMachine.BuildManager.PreviewHandler.UpdateGhostPosition(previewPosition);
+        UpdateGhost();
     }
 
     public override void ExitState() 
     {
         
+    }
+    #endregion
+
+    #region Build Preview Application
+    private void UpdateGhost()
+    {
+        var screenPos = _inputManager.PointPosition();
+
+        if (_worldPointer.TryGetProjectedPosition(screenPos, out Vector3 previewPosition))
+            _stateMachine.BuildManager.PreviewHandler.UpdateGhostPosition(previewPosition);
     }
     #endregion
 }
