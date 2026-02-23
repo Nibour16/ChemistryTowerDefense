@@ -63,4 +63,16 @@ public class BuildPreviewHandler : BaseBuildSecretary
 
         _ghost.transform.position = worldPos + _anchorOffset;
     }
+
+    public void ShowGhost()
+    {
+        if (_ghost != null && !_ghost.activeSelf)
+            _ghost.SetActive(true);
+    }
+
+    public void HideGhost()
+    {
+        if (_ghost != null && _ghost.activeSelf)
+            _ghost.SetActive(false);
+    }
 }

@@ -47,8 +47,22 @@ public class BuildState : BaseState
     {
         var screenPos = _inputManager.PointPosition();
 
+        if (!Application.isFocused || !IsMouseInsideScreen(screenPos))
+        {
+            _stateMachine.BuildManager.PreviewHandler.HideGhost();
+            return;
+        }
+
+        _stateMachine.BuildManager.PreviewHandler.ShowGhost();
+
         if (_worldPointer.TryGetProjectedPosition(screenPos, out Vector3 previewPosition))
             _stateMachine.BuildManager.PreviewHandler.UpdateGhostPosition(previewPosition);
+    }
+
+    private bool IsMouseInsideScreen(Vector3 m)
+    {
+        return m.x >= 0 && m.x <= Screen.width &&
+               m.y >= 0 && m.y <= Screen.height;
     }
     #endregion
 }
