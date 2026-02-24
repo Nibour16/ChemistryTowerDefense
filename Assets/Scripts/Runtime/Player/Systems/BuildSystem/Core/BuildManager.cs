@@ -9,6 +9,7 @@ public class BuildManager : Singleton<BuildManager>
 
     private BuildDefinition _currentDefinition;
     private BuildPreviewHandler _previewHandler;
+    private TowerPlacementHandler _placementHandler;
     #endregion
 
     #region Properties of Support Components and Modules
@@ -16,6 +17,7 @@ public class BuildManager : Singleton<BuildManager>
     public IGridService GridService => _gridService;
     public BuildDefinition CurrentDefinition => _currentDefinition;
     public BuildPreviewHandler PreviewHandler => _previewHandler;
+    public TowerPlacementHandler PlacementHandler => _placementHandler;
     #endregion
 
     #region Initialization
@@ -30,6 +32,7 @@ public class BuildManager : Singleton<BuildManager>
         _stateMachine = GetComponent<BuildStateMachine>();
         _gridService = ServiceCollector.Grid;
         _previewHandler = GetComponent<BuildPreviewHandler>();
+        _placementHandler = new TowerPlacementHandler(_gridService);
 
         SecretaryBinder();
     }
@@ -60,6 +63,13 @@ public class BuildManager : Singleton<BuildManager>
         _stateMachine.SetState(_stateMachine.BuildState);
     }
 
+    public void OnBuildFinished()
+    {
+        ClearDefinition();
+    }
+    #endregion
+
+    #region Build System Support
     private bool ShouldCancelBuildSelection(GameObject prefab)
     {
         var isSameTower = _currentDefinition != null && _currentDefinition.TowerPrefab == prefab;
@@ -68,7 +78,7 @@ public class BuildManager : Singleton<BuildManager>
         return isSameTower || isInvalidTower;
     }
 
-    public void ClearDefinition()
+    private void ClearDefinition()
     {
         _previewHandler.DestroyGhost();
 
@@ -76,11 +86,6 @@ public class BuildManager : Singleton<BuildManager>
 
         _currentDefinition = null;
         _stateMachine.SetState(_stateMachine.NormalState);
-    }
-
-    public void OnBuildFinished()
-    {
-
     }
     #endregion
 }

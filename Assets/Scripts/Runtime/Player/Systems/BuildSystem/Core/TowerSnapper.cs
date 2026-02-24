@@ -17,8 +17,10 @@ public class TowerSnapper
             snappedPos = default;
             return false;
         }
-
-        snappedPos = _grid.GetCellCenter(cellX, cellZ);
-        return true;
+        else
+        {
+            snappedPos = _grid.GetCellCenter(cellX, cellZ);
+            return true;
+        }
     }
 }

@@ -42,12 +42,13 @@ public class BuildPreviewHandler : BaseBuildSecretary
         {
             col.enabled = false;
         }
+    }
 
-        /*// Change the material colour
-        foreach (var renderer in ghost.GetComponentsInChildren<Renderer>())
-        {
-            renderer.sharedMaterial.color = new Color(0, 1, 0, 0.5f);
-        }*/
+    public GameObject ExtractGhost()
+    {
+        var result = _ghost;
+        _ghost = null;
+        return result;
     }
 
     public void DestroyGhost()
@@ -56,12 +57,17 @@ public class BuildPreviewHandler : BaseBuildSecretary
             Destroy(_ghost);
     }
 
-    public void UpdateGhostPosition(Vector3 worldPos)
+    public void ApplyGhostVisualPosition(Vector3 worldPos, out Vector3 finalPos)
     {
         if (_ghost == null)
+        {
+            Debug.LogWarning("Ghost does not exist, return the final position as default value");
+            finalPos = default;
             return;
+        }
 
-        _ghost.transform.position = worldPos + _anchorOffset;
+        finalPos = worldPos + _anchorOffset;
+        _ghost.transform.position = finalPos;
     }
 
     public void ShowGhost()
