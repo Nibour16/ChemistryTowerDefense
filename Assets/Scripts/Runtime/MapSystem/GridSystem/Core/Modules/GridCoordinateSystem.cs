@@ -24,8 +24,8 @@ public class GridCoordinateSystem
     {
         Vector3 localPos = worldPos - _generator.Origin;
 
-        x = Mathf.FloorToInt(localPos.x / _generator.CellSize);
-        z = Mathf.FloorToInt(localPos.z / _generator.CellSize);
+        x = Mathf.RoundToInt(localPos.x / _generator.CellSize);
+        z = Mathf.RoundToInt(localPos.z / _generator.CellSize);
 
         return IsInsideGrid(x, z);
     }
