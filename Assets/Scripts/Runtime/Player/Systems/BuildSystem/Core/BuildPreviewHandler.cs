@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 public class BuildPreviewHandler : BaseBuildSecretary
 {
@@ -26,19 +27,21 @@ public class BuildPreviewHandler : BaseBuildSecretary
             _anchorOffset = default;
         }
 
-        MakeGhostVisual(prefab);
+        MakeGhostVisual();
     }
 
-    private void MakeGhostVisual(GameObject ghost)
+    private void MakeGhostVisual()
     {
+        if (_ghost == null) return;
+        
         // Stop all momobehaviours
-        foreach (var comp in ghost.GetComponentsInChildren<MonoBehaviour>())
+        foreach (var comp in _ghost.GetComponentsInChildren<MonoBehaviour>())
         {
             comp.enabled = false;
         }
 
         // Stop all collisions
-        foreach (var col in ghost.GetComponentsInChildren<Collider>())
+        foreach (var col in _ghost.GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
         }
