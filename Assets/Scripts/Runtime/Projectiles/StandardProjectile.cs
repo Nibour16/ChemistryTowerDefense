@@ -1,24 +1,40 @@
 using UnityEngine;
 
-public class StandardProjectile : MonoBehaviour
+public class StandardProjectile : MonoBehaviour, IPoolable
 {
     [SerializeField] protected float baseDamage = 20f;
     [SerializeField] protected float speed = 5f;
     
+    private bool _isActive = false;
     public float BaseDamage => baseDamage;
+
+    public void OnSpawn()
+    {
+        _isActive = true;
+        gameObject.SetActive(true);
+    }
+
+    public void OnDespawn()
+    {
+        _isActive = false;
+        gameObject.SetActive(false);
+    }
 
     protected virtual void Update()
     {
-        //By default it will always moving forward with a constant speed
+        if (!_isActive) return;
+
         transform.position += transform.forward * speed * Time.deltaTime;
     }
-    
-    protected virtual void OnTriggerEnter(Collider other)   //Handle hit
+
+    protected virtual void OnTriggerEnter(Collider other)
     {
+        if (!_isActive) return;
+
         if (other.TryGetComponent<IDamageable>(out var damageable))
         {
             damageable.OnTakenDamage(baseDamage);
-            Destroy(gameObject);
+            PoolManager.Instance.Return(this);
         }
     }
 }
