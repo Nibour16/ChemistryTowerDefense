@@ -222,5 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53522ad0518fda4aa5b309a32c154ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StandardShootingTower
+  drawGizmos: 1
+  debugColour: {r: 1, g: 0, b: 0, a: 1}
+  checkModuleValidation: 1
   projectile: {fileID: 8547738583317667971, guid: d4dd8bc21c0cbbc41b1806bdc3eacbe0, type: 3}
   shootingSource: {fileID: 1168880614928423918}

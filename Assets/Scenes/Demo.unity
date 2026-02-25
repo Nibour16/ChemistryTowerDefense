@@ -932,7 +932,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1210091707495614418, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: showPathInGame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1210091707495614418, guid: 0fa4b6161e3ef134ebc5c07c6f2a33f9, type: 3}
       propertyPath: pathPoints.Array.size
