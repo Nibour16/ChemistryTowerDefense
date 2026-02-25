@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool<T> where T : MonoBehaviour, IPoolable
+public class ObjectPool<T> where T : PooledMonoBehaviour<T>
 {
     private readonly T _prefab;
     private readonly Transform _parent;
@@ -22,10 +22,12 @@ public class ObjectPool<T> where T : MonoBehaviour, IPoolable
 
     public T Get(Vector3 pos, Quaternion rot)
     {
-        T obj = _pool.Count > 0 ? _pool.Dequeue()
-                               : Object.Instantiate(_prefab, _parent);
+        T obj = _pool.Count > 0 ? _pool.Dequeue() : Object.Instantiate(_prefab, _parent);
 
         obj.transform.SetPositionAndRotation(pos, rot);
+
+        obj.SetPool(this);
+
         obj.OnSpawn();
         return obj;
     }

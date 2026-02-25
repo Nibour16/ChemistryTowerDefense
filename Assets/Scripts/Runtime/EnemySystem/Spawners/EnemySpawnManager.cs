@@ -2,33 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class PreparedEnemies
-{
-    public EnemyCharacter preparedEnemy;
-    [Min(1)] public int number = 1;
-}
-
-[System.Serializable]
-public class RoundData
-{
-    public PreparedEnemies[] preparedEnemies;
-    public EnemySpawner[] relatedEnemySpawners;
-
-    [Min(0)] public float waitTimeBeforeSpawn = 20f;
-    [Min(0)] public float spawnDelay = 0;
-
-    public void EnsureEnemySpawners(List<EnemySpawner> activeSpawners)
-    {
-        if (relatedEnemySpawners == null ||
-            relatedEnemySpawners.Length == 0)
-        {
-            relatedEnemySpawners = activeSpawners.ToArray();
-            //If not explicitly assigned, use all active spawners as default
-        }
-    }
-}
-
 public class EnemySpawnManager : Singleton<EnemySpawnManager>
 {
     [SerializeField] private RoundData[] rounds;

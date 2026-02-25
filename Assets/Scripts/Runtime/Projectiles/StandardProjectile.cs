@@ -1,40 +1,43 @@
 using UnityEngine;
 
-public class StandardProjectile : MonoBehaviour, IPoolable
+public class StandardProjectile : PooledMonoBehaviour<StandardProjectile>
 {
     [SerializeField] protected float baseDamage = 20f;
     [SerializeField] protected float speed = 5f;
-    
-    private bool _isActive = false;
+
     public float BaseDamage => baseDamage;
 
-    public void OnSpawn()
-    {
-        _isActive = true;
-        gameObject.SetActive(true);
-    }
+    private EnemyCharacter _target;
 
-    public void OnDespawn()
+    public void Initialize(EnemyCharacter target)
     {
-        _isActive = false;
-        gameObject.SetActive(false);
+        _target = target;
     }
 
     protected virtual void Update()
     {
-        if (!_isActive) return;
+        if (_target == null)
+            ReturnToPool();
 
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += 10f * Time.deltaTime * transform.forward;
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (!_isActive) return;
-
         if (other.TryGetComponent<IDamageable>(out var damageable))
         {
             damageable.OnTakenDamage(baseDamage);
-            PoolManager.Instance.Return(this);
+            ReturnToPool();
         }
+    }
+
+    public override void OnSpawn()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public override void OnDespawn()
+    {
+        gameObject.SetActive(false);
     }
 }

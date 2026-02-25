@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class SphereDetector : BaseTargetDetector
 {
-    public override List<EnemyCharacter> Detect(BaseTower tower)
+    private List<EnemyCharacter> _results = new();
+
+    protected override List<EnemyCharacter> OnDetect(BaseTower tower)
     {
-        var results = new List<EnemyCharacter>();
+        _results.Clear();
 
         float range = tower.Stat.AttackRange;
 
@@ -19,22 +21,16 @@ public class SphereDetector : BaseTargetDetector
 
             if (hit.TryGetComponent<EnemyCharacter>(out var enemy))
             {
-                results.Add(enemy);
+                _results.Add(enemy);
             }
         }
 
-        return results;
+        return _results;
     }
 
-    public void DrawGizmos(BaseTower tower)
+    public override void DrawGizmos(BaseTower tower, Color debugColour)
     {
-        if (Application.isPlaying == false)
-            return;
-
-        if (tower == null)
-            return;
-
-        Gizmos.color = Color.red;
+        base.DrawGizmos(tower, debugColour);
         Gizmos.DrawWireSphere(tower.transform.position, tower.Stat.AttackRange);
     }
 }

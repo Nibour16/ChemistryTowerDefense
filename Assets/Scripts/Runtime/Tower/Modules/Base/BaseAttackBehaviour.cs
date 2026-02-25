@@ -1,4 +1,4 @@
 public abstract class BaseAttackModule
 {
-    public abstract void Attack(BaseTower tower);
+    public abstract void Attack(EnemyCharacter target);
 }

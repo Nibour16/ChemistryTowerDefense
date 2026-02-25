@@ -1,44 +1,35 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PoolManager : Singleton<PoolManager>
 {
-    private readonly Dictionary<Type, object> _pools = new();
+    private readonly Dictionary<MonoBehaviour, object> _pools = new();
 
     public void RegisterPool<T>(T prefab, int initialSize = 10)
-       where T : MonoBehaviour, IPoolable
+       where T : PooledMonoBehaviour<T>
     {
-        var type = typeof(T);
-
-        if (_pools.ContainsKey(type))
-            return;
+        if (_pools.ContainsKey(prefab)) return;
 
         var pool = new ObjectPool<T>(prefab, initialSize, transform);
-        _pools.Add(type, pool);
+        _pools.Add(prefab, pool);
     }
 
-    // Get Pool
-    public T Get<T>(Vector3 pos, Quaternion rot)
-        where T : MonoBehaviour, IPoolable
+    public T Get<T>(T prefab, Vector3 pos, Quaternion rot)
+        where T : PooledMonoBehaviour<T>
     {
-        var type = typeof(T);
-
-        if (!_pools.TryGetValue(type, out var poolObj))
-            throw new Exception($"No pool registered for type {type}");
+        if (!_pools.TryGetValue(prefab, out var poolObj))
+        {
+            RegisterPool(prefab);
+            poolObj = _pools[prefab];
+        }
 
         var pool = (ObjectPool<T>)poolObj;
         return pool.Get(pos, rot);
     }
 
-    // Return Pool
-    public void Return<T>(T obj)
-        where T : MonoBehaviour, IPoolable
+    public void Return<T>(T prefab, T obj) where T : PooledMonoBehaviour<T>
     {
-        var type = typeof(T);
-
-        if (!_pools.TryGetValue(type, out var poolObj))
-            throw new Exception($"No pool registered for type {type}");
+        if (!_pools.TryGetValue(prefab, out var poolObj)) return;
 
         var pool = (ObjectPool<T>)poolObj;
         pool.Return(obj);
