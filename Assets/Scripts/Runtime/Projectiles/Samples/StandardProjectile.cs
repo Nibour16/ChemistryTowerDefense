@@ -7,18 +7,19 @@ public class StandardProjectile : PooledMonoBehaviour<StandardProjectile>
 
     public float BaseDamage => baseDamage;
 
-    private EnemyCharacter _target;
+    protected EnemyCharacter target;
 
     public void Initialize(EnemyCharacter target)
     {
-        _target = target;
+        this.target = target;
     }
 
     protected virtual void Update()
     {
-        if (_target == null)
+        if (target == null)
             ReturnToPool();
 
+        // Projectile Movement Logic
         transform.position += 10f * Time.deltaTime * transform.forward;
     }
 
@@ -29,15 +30,5 @@ public class StandardProjectile : PooledMonoBehaviour<StandardProjectile>
             damageable.OnTakenDamage(baseDamage);
             ReturnToPool();
         }
-    }
-
-    public override void OnSpawn()
-    {
-        gameObject.SetActive(true);
-    }
-
-    public override void OnDespawn()
-    {
-        gameObject.SetActive(false);
     }
 }

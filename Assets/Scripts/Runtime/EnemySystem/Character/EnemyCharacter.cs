@@ -17,6 +17,7 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     protected float currentRotatingSpeed;
 
     private EnemyManager _manager;
+    private bool _isDead = false;
 
     protected virtual void Awake()
     {
@@ -33,6 +34,11 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     {
         _manager.Register(this);
     }
+
+    /*protected void OnDisable()
+    {
+        _manager.Unregister(this);
+    }*/
 
     protected virtual void Start()
     {
@@ -71,6 +77,10 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
 
     public virtual void OnDead()
     {
+        if (_isDead) return;
+        
+        _isDead = true;
+
         _manager.Unregister(this);
         Destroy(gameObject);
     }
