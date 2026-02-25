@@ -139,7 +139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2532025263253427435, guid: e4469b3d44a8908428aa41ea5172ece7, type: 3}
       propertyPath: attackRange
-      value: 15
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5616196315025227737, guid: e4469b3d44a8908428aa41ea5172ece7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -224,6 +224,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StandardShootingTower
   drawGizmos: 1
   debugColour: {r: 1, g: 0, b: 0, a: 1}
+  rotationSpeed: 10
+  isGroundTower: 1
+  aimingTolerance: 5
   checkModuleValidation: 1
   projectile: {fileID: 8547738583317667971, guid: d4dd8bc21c0cbbc41b1806bdc3eacbe0, type: 3}
   shootingSource: {fileID: 1168880614928423918}

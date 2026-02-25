@@ -35,10 +35,10 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
         _manager.Register(this);
     }
 
-    /*protected void OnDisable()
+    protected void OnDisable()
     {
         _manager.Unregister(this);
-    }*/
+    }
 
     protected virtual void Start()
     {
@@ -67,7 +67,7 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     {
         currentHealth -= basedamage;
         Debug.Log(
-            $"Received {basedamage} damage, now current Health is {currentHealth}, " +
+            $"{name}: Received {basedamage} damage, now current Health is {currentHealth}, " +
             $"original health is {stat.Health}"
         );
 

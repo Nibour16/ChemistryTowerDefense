@@ -69,13 +69,16 @@ public abstract class BaseTower : MonoBehaviour
         
         coolingTimer -= Time.deltaTime;
 
+        var targets = detector.Detect(_enemyManager, this);
+
+        if (_currentTarget != null && !targets.Contains(_currentTarget))
+            _currentTarget = null;
+
         if (_currentTarget == null)
         {
-            var targets = detector?.Detect(_enemyManager, this);
-            if (targets == null || targets.Count == 0) return;
+            if (targets.Count == 0) return;
 
-            _currentTarget = selector?.Select(targets);
-            if (_currentTarget == null) return;
+            _currentTarget = selector.Select(targets);
         }
 
         RotateToTarget(_currentTarget);

@@ -4,7 +4,7 @@ public class EnemyMove : MonoBehaviour
 {
     [Header("Advanced")]
     // Allow small buffer to tell that enemy has reached a point
-    [Min(0f)]
+    [Min(0.01f)]
     [SerializeField] private float reachDistance = 0.05f;
     [SerializeField] private bool neverAcrossPointWhileReaching = false;
 
@@ -85,10 +85,10 @@ public class EnemyMove : MonoBehaviour
             isReachPathEnd = true;
 
             if (_callGameOverIfReachEnd)
-                reachDistanceCurrent = 0f;  // Final point, must be precise
+                reachDistanceCurrent = 0.01f;  // Final point, must be more precise
         }
 
-        if (detectDir.magnitude <= reachDistanceCurrent) // If reach the target point
+        if (detectDir.sqrMagnitude <= reachDistanceCurrent * reachDistanceCurrent) // If reach the target point
         {
             // Next target will be the next point
             _currentPathPointIndex++;
