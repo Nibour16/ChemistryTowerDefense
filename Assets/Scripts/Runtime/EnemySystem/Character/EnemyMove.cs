@@ -77,11 +77,9 @@ public class EnemyMove : MonoBehaviour
 
         // Calculate the size of the moving step
         float step = _enemy.GetCurrentMoveSpeed() * Time.deltaTime;
-        float reachDistance = this.reachDistance;
-
         bool isReachPathEnd = false;
-
         float reachDistanceCurrent = reachDistance; // Middle points, can be a tiny space
+
         if (_currentPathPointIndex >= _pathPoints.Length - 1)
         {
             isReachPathEnd = true;
@@ -90,7 +88,7 @@ public class EnemyMove : MonoBehaviour
                 reachDistanceCurrent = 0f;  // Final point, must be precise
         }
 
-        if (detectDir.magnitude <= reachDistance) // If reach the target point
+        if (detectDir.magnitude <= reachDistanceCurrent) // If reach the target point
         {
             // Next target will be the next point
             _currentPathPointIndex++;
@@ -140,9 +138,9 @@ public class EnemyMove : MonoBehaviour
     {
         enabled = false;    // Stop moving
 
-        var reachPoint = GetComponentInChildren<IEnemyReachEnd>();
+        var reachEnd = GetComponentInChildren<IEnemyReachEnd>();
         // Call method from the interface component if the enemy object has
-        reachPoint?.OnEnemyReachEnd(this);
+        reachEnd?.OnEnemyReachEnd(this);
 
         // Call Game Over Method if the end of the path is the enemy's goal
         if (_callGameOverIfReachEnd)
