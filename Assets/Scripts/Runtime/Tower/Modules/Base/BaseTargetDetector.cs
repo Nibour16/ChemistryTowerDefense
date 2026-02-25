@@ -3,13 +3,15 @@ using UnityEngine;
 
 public abstract class BaseTargetDetector
 {
+    protected EnemyManager enemyManager;
     private static readonly List<EnemyCharacter> _emptyResult = new();
 
-    public List<EnemyCharacter> Detect(BaseTower tower)
+    public List<EnemyCharacter> Detect(EnemyManager enemyManager, BaseTower tower)
     {
         if (tower == null)
             return _emptyResult;
 
+        this.enemyManager = enemyManager;
         var results = OnDetect(tower);
 
         return results ?? _emptyResult;

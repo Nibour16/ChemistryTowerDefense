@@ -10,9 +10,11 @@ public abstract class BaseTower : MonoBehaviour
     [Header("Advanced Setting")]
     [SerializeField] private bool checkModuleValidation = true;
 
+    private EnemyManager _enemyManager;
+
     protected TowerStat stat;
     public TowerStat Stat => stat;
-
+    
     protected float coolingTimer = 0;
 
     protected BaseTargetDetector detector;
@@ -21,6 +23,7 @@ public abstract class BaseTower : MonoBehaviour
 
     protected virtual void Awake()
     {
+        _enemyManager = EnemyManager.Instance;
         stat = GetComponent<TowerStat>();
         //coolingTimer = stat.AttackDelay;
 
@@ -43,7 +46,7 @@ public abstract class BaseTower : MonoBehaviour
 
         if (coolingTimer > 0f) return;
 
-        var targets = detector?.Detect(this);
+        var targets = detector?.Detect(_enemyManager, this);
 
         if (targets == null || targets.Count == 0) return;
 

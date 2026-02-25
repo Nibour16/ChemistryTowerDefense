@@ -3,26 +3,19 @@ using UnityEngine;
 
 public class SphereDetector : BaseTargetDetector
 {
-    private List<EnemyCharacter> _results = new();
+    private readonly List<EnemyCharacter> _results = new();
 
     protected override List<EnemyCharacter> OnDetect(BaseTower tower)
     {
         _results.Clear();
 
         float range = tower.Stat.AttackRange;
+        Vector3 pos = tower.transform.position;
 
-        Collider[] hits = Physics.OverlapSphere(
-            tower.transform.position, range/*, targetLayer*/);
-
-        foreach (var hit in hits)
+        foreach (var enemy in enemyManager.ActiveEnemies)
         {
-            if (hit.transform.IsChildOf(tower.transform))
-                continue;
-
-            if (hit.TryGetComponent<EnemyCharacter>(out var enemy))
-            {
+            if (RangeMath.InSphere(pos, enemy.transform.position, range))
                 _results.Add(enemy);
-            }
         }
 
         return _results;

@@ -16,14 +16,22 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     protected float currentMoveSpeed;
     protected float currentRotatingSpeed;
 
+    private EnemyManager _manager;
+
     protected virtual void Awake()
     {
+        _manager = EnemyManager.Instance;
         stat = GetComponent<EnemyStat>();
         enemyMove = GetComponent<EnemyMove>();
 
         currentHealth = stat.Health;
         currentMoveSpeed = stat.MoveSpeed;
         currentRotatingSpeed = stat.RotatingSpeed;
+    }
+
+    protected virtual void OnEnable()
+    {
+        _manager.Register(this);
     }
 
     protected virtual void Start()
@@ -63,7 +71,7 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
 
     public virtual void OnDead()
     {
-        Debug.Log("I died");
+        _manager.Unregister(this);
         Destroy(gameObject);
     }
 }
